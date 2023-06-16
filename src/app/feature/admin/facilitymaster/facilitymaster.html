@@ -1,0 +1,616 @@
+<!-- <title>{{message}}</title> -->
+<div  class="container-fluid">
+  <div *ngIf="loadingSymbol" class="loader"></div>
+  <div [ngClass]="{'overlay':loadingSymbol,'a':!loadingSymbol}">
+    <div class="container-fluid bodyDiv">
+      <!-- {{noAccessMessage}} -->
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div *ngIf="loadingSymbol" class="loader"></div>
+  <div [ngClass]="{'overlay disabled':loadingSymbol,'a':!loadingSymbol}">
+    <div class="container-fluid bodyDiv">
+      <!-- div for header -->
+      <div class="row">
+        <span>
+          <h1>{{message}}</h1>
+        </span>
+      </div>
+      <!-- div for create button -->
+      <div class="row buttonPullRight">
+        <div class="createButtonDiv" (click)="addSite(addSiteModal)">
+          <div class="createButtonIconDiv">
+            <img class="createButtonIcon" src="../../../assets/images/create.png" alt="click here to create a Package">
+            <!-- <span class="glyphicon glyphicon-plus plusicon"></span> -->
+          </div>
+          <div class="createButtonValueDiv">
+            Add Site
+          </div>
+        </div>
+        &nbsp;&nbsp;
+        <div class="createButtonDiv" (click)="addFacility(addFacilityModal)">
+          <div class="createButtonIconDiv">
+            <img class="createButtonIcon" src="../../../assets/images/create.png" alt="click here to enable missed dates">
+          </div>
+          <div class="createButtonValueDiv">
+            Add facility
+          </div>
+        </div>
+      </div>
+      <br />
+      <!-- div for filter & grid -->
+      <div class="row">
+        <!-- div for filter -->
+        <div class="col-sm-2 filteryDiv">
+          <section class="mySection">
+            <div class="row">
+              <div class="col-md-7">
+                <h2>Filters</h2>
+              </div>
+              <div *ngIf="enableClearAll" class="col-md-5 clearAll">
+                <span (click)="clearAllFilter()">Clear all</span>
+              </div>
+            </div>
+            <div class="row filtersheight">
+              <div *ngFor="let fa of filteredArray; let i=index">
+                <div class="filterSelectedValue" (click)="deleteFilter(fa)">
+                  <div class="filterCrossIcon">✕</div>
+                  <div class="filterCrossValue">{{fa.text}}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleCountry()" data-toggle="collapse"
+              data-target="#countryFilter">
+              <div class="col-md-10 ">
+                Country
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#countryFilter" *ngIf="!showCountry">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg"  alt="click greaterArrow to open Country filter">
+                </div>
+                <div data-toggle="collapse" data-target="#countryFilter" *ngIf="showCountry">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Country filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="countryFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let country of countryDetails | slice:0:countryCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="country.countryId" [name]="country.countryName"
+                      id="{{country.countryName}}" [(ngModel)]="country.selected" (change)="selectCountry(country)" />
+                    <label for="{{country.countryName}}"> {{country.countryName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="countryDetails?.length > countryCount">
+                  <span class="showMore" (click)="displayMoreCountry()">{{showMoreCountry}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleCity()" data-toggle="collapse"
+              data-target="#cityFilter">
+              <div class="col-md-10">
+                City
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#cityFilter" *ngIf="!showCity">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open City filter">
+                </div>
+                <div data-toggle="collapse" data-target="#cityFilter" *ngIf="showCity">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open City filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="cityFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let city of cityDetails | slice:0:cityCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="city.cityId" name="{{city.cityName}}" id="{{city.cityName}}"
+                      [(ngModel)]="city.selected" (change)="selectCity(city)" />
+                    <label for="{{city.cityName}}"> {{city.cityName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="cityDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreCity()">{{showMoreCity}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleFacility()" data-toggle="collapse"
+              data-target="#facilityFilter">
+              <div class="col-md-10 ">
+                Facility
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#facilityFilter" *ngIf="!showFacility">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open Site filter">
+                </div>
+                <div data-toggle="collapse" data-target="#facilityFilter" *ngIf="showFacility">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Site filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="facilityFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let facility of Basefacilitydetails | slice:0:facilityCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="facility.facilityId" [name]="facility.facilityName"
+                      id="{{facility.facilityName}}" [(ngModel)]="facility.selected"
+                      (change)="selectFacility(facility)" />
+                    <label for="{{facility.facilityName}}"> {{facility.facilityName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="Basefacilitydetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreFacility()">{{showMoreFacility}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleSite()" data-toggle="collapse"
+              data-target="#siteFilter">
+              <div class="col-md-10 ">
+                Site
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#siteFilter" *ngIf="!showSite">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open Site filter">
+                </div>
+                <div data-toggle="collapse" data-target="#siteFilter" *ngIf="showSite">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Site filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="siteFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">  
+                  <div *ngFor="let site of siteDetails | slice:0:SiteCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" id="{{site.facilityName}}Site"  [value]="site.facilityId" [name]="site.facilityName"
+                      [(ngModel)]="site.selected"
+                      (change)="selectSite(site)" />
+                    <label for="{{site.facilityName}}Site"> {{site.facilityName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="siteDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreSite()">{{showMoreSite}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- div for grid -->
+
+        <div class="col-sm-10">
+          <div class="row gridDiv">
+            <table class="table table-striped table-hover ">
+              <thead class="table-header">
+                <!-- thead-inverse -->
+                <tr>
+                  <th class="cansort" (click)="sorting('Site')">SITE
+                    <span *ngIf="defaultSort == false && sortColumn == 'Site' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="defaultSort == false && sortColumn == 'Site' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('Facility')">FACILITY
+                    <span *ngIf="sortColumn == 'Facility' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'Facility' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('City')">CITY
+                    <span *ngIf="sortColumn == 'City' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'City' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('modifiedby')">MODIFIED BY
+                    <span *ngIf="sortColumn == 'modifiedby' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'modifiedby' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('modifiedon')">MODIFIED ON
+                    <span *ngIf="sortColumn == 'modifiedon' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'modifiedon' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="SiteFacilityDetails?.length<=0">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>No Records found</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <ng-container *ngIf="SiteFacilityDetails?.length>0">
+                  <tr *ngFor="let item of SiteFacilityDetails">
+                    <td>{{item.Site}}</td>
+                    <td>{{item.Facility}}</td>
+                    <td>{{item.City}}</td>
+                    <td>{{item.modifiedby}}</td>
+                    <td>{{item.modifiedon | date : "dd-MMM-yyyy"}}</td>
+                    <!-- <td><img class="editIcon" src="../../../assets/images/icon-edit.png" (click)=" EditRole(addRoleModal,item)"></td> -->
+                    <td><span class="editIcon glyphicon glyphicon-pencil" (click)="edit(addSiteModal,item)"
+                        title="Edit"></span>
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="SiteFacilityDetails?.length>0" class="row gridDiv showPageDiv table-footer">
+            <div class="col-sm-5 pagination">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination" id="paginationtab1">
+                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a (click)="setPage(1)">
+                    <<</a> </li> <li [ngClass]="{disabled:pager.currentPage === 1}">
+                      <a (click)="setPage(pager.currentPage - 1)">
+                        <</a> </li> <li *ngFor="let page of pager.pages"
+                          [ngClass]="{active:pager.currentPage === page}">
+                          <a (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(pager.currentPage + 1)">></a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(pager.totalPages)">>></a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-sm-5 pagingOptions">
+              <label for="ddlPageItems1" class="labelpagingOptions">Show</label>&nbsp;
+              <select id="ddlPageItems1" class="optionddl"  [ngModel]="selectedPageSize"
+                 (ngModelChange)="onPagingOptionsChange($event)">
+                <option [value]="i" *ngFor="let i of pageOptions">{{i}}</option>
+              </select>&nbsp;
+              entries
+            </div>
+            <div class="col-sm-2 textnowrap">
+              <span class="pagerecordcount">{{pager.startIndex + 1}} - {{pager.endIndex + 1}} of
+                {{pager.totalItems}} records </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal pop up for Add Role/Action -->
+<ng-template #addFacilityModal let-modal>
+
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <span class="modal-title"> {{ ModalPopUpHeader }} </span>
+    <!-- <img class="closebutton"  (click)="cancelbtn()" src="../../../../assets/images/close.png"> -->
+    <span class="closebutton glyphicon glyphicon-remove" (click)="cancelbtn()"></span>
+  </div>
+
+  <!-- Modal body -->
+  <div *ngIf="loadingSymbolForModal" class="loader"></div>
+  <div [ngClass]="{'overlay':loadingSymbolForModal,'a':!loadingSymbolForModal}">
+    <div class="modal-body">
+      <br />
+      <div class="row alignitemcenter">
+        <div class="col-md-2 textnowrap">
+          <label for="ddlFacility">Country<span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-4">
+          <select id="ddlFacility" [(ngModel)]='selectCountryID' (change)="onCountryChange()">
+          <option class='option' value="-1">Select</option>
+          <option class='option' *ngFor='let country of countryDetails' [value]="country.countryId">
+            {{country.countryName}}</option>
+        </select>
+        </div>
+        <div class="col-md-2 textnowrap">
+          <label for="ddlZone">Zone<span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-4">
+          <select id="ddlZone"
+            [(ngModel)]='Zonename' (change)="OnZoneChange()">
+            <option class='option' value="null">Select</option>
+            <option class='option' *ngFor='let zone of zoneDetails' [value]="zone.zoneName">
+              {{zone.zoneName}}</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <br>
+        <div class="row alignitemcenter">
+          <div class="col-md-2 textnowrap">
+            <label for="ddlCity">City<span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <select id="ddlCity" [(ngModel)]='selectCityId'>
+              <option class='option' value="-1">Select</option>
+              <option class='option' *ngFor='let city of cityDetailsbyZone' [value]="city.CityNm">
+                {{city.CityNm}}</option>
+            </select>
+          </div>
+          <div class="col-md-2 textnowrap">
+            <label for="txtFacility">Facility<span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <input id="txtFacility" type="text" [(ngModel)]='txtFacility' (keypress)="inputValidator($event)">
+          </div>
+        </div>
+      <br />
+      <br />
+      <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn" (click)="SaveFacility()">Save</button>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn" data-dismiss="modal" (click)="clearfacility()">Clear</button>
+        </div>
+        <div class="col-md-3">
+        </div>
+      </div>
+      <br />
+      <br />
+      <div *ngIf="ViewFacilityDetails?.length>0" class="row modalgridDiv">
+        <table class="table table-striped table-hover ">
+          <thead class="table-header">
+            <!-- thead-inverse -->
+            <tr>
+              <th class="cansort" (click)="sortingFacilityView('FacilityNm')">Facility
+                <span
+                  *ngIf="defaultSortFacility == false && ViewFacilitysortColumn == 'FacilityNm' && ViewFacilitysortDirection == 'asc'">▲</span>
+                <span
+                  *ngIf="defaultSortFacility == false && ViewFacilitysortColumn == 'FacilityNm' && ViewFacilitysortDirection == 'desc'">▼</span>
+              </th>
+              <th class="cansort" (click)="sortingFacilityView('ZoneNm')">Zone
+                <span *ngIf="ViewFacilitysortColumn == 'ZoneNm' && ViewFacilitysortDirection == 'asc'">▲</span>
+                <span *ngIf="ViewFacilitysortColumn == 'ZoneNm' && ViewFacilitysortDirection == 'desc'">▼</span>
+              </th>
+              <th class="cansort" (click)="sortingFacilityView('CityNm')">City
+                <span *ngIf="ViewFacilitysortColumn == 'CityNm' && ViewFacilitysortDirection == 'asc'">▲</span>
+                <span *ngIf="ViewFacilitysortColumn == 'CityNm' && ViewFacilitysortDirection == 'desc'">▼</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="ViewFacilityDetails?.length==0">
+              <td></td>
+              <td>No Records found</td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="ViewFacilityDetails?.length>0">
+              <tr *ngFor="let item of ViewFacilityDetails">
+                <td >{{item.FacilityNm}}</td>
+                <td>{{item.ZoneNm}}</td>
+                <td>{{item.CityNm}}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="ViewFacilityDetails?.length>0"
+        class="row modalgridDiv showPageDiv table-footer">
+        <div class="col-sm-5 pagination">
+          <ul *ngIf="pagerView.pages && pagerView.pages.length" class="pagination" id="paginationtab2">
+            <li [ngClass]="{disabled:pagerView.currentPage === 1}">
+              <a (click)="setPageView(1)">
+                <<</a> </li> <li [ngClass]="{disabled:pagerView.currentPage === 1}">
+                  <a (click)="setPageView(pagerView.currentPage - 1)">
+                    <</a> </li> <li *ngFor="let page of pagerView.pages"
+                      [ngClass]="{active:pagerView.currentPage === page}">
+                      <a (click)="setPageView(page)">{{page}}</a>
+            </li>
+            <li [ngClass]="{disabled:pagerView.currentPage === pagerView.totalPages}">
+              <a (click)="setPageView(pagerView.currentPage + 1)">></a>
+            </li>
+            <li [ngClass]="{disabled:pagerView.currentPage === pagerView.totalPages}">
+              <a (click)="setPageView(pagerView.totalPages)">>></a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-5 pagingOptions">
+          <label for="ddlPageItems" class="labelpagingOptions">Show</label>&nbsp;
+          <select id="ddlPageItems" class="optionddl"  [ngModel]="selectedPageSizeView"
+             (ngModelChange)="onPagingOptionsChangeView($event)">
+            <option [value]="i" *ngFor="let i of pageOptionsView">{{i}}</option>
+          </select>&nbsp;
+          entries
+        </div>
+        <div class="col-sm-2 textnowrap">
+          <span class="pagerecordcount">{{pagerView.startIndex + 1}} - {{pagerView.endIndex + 1}} of
+            {{pagerView.totalItems}} records </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #addSiteModal let-modal>
+
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <span class="modal-title"> {{ ModalPopUpHeader }} </span>
+    <!-- <img class="closebutton"  (click)="cancelbtn()" src="../../../../assets/images/close.png"> -->
+    <span class="closebutton glyphicon glyphicon-remove" (click)="cancelbtn()"></span>
+  </div>
+
+  <!-- Modal body -->
+  <div *ngIf="loadingSymbolForModal" class="loader"></div>
+  <div [ngClass]="{'overlay':loadingSymbolForModal,'a':!loadingSymbolForModal}">
+    <div class="modal-body">
+      <br />
+      <div class="row alignitemcenter">
+        <div class="col-md-2 textnowrap">
+          <label for="ddlFacility">Facility<span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-4">
+          <select id="ddlFacility" [ngClass]="{ 'disabled': isAddSite == true ? false : true }"
+            [(ngModel)]='selectfacilityId' (change)="onfacilityChange()">
+            <option class='option' value="-1" *ngIf="isAddSite">Select</option>
+            <option class="option" *ngFor='let facility of facilitydetails' [value]="facility.facilityId"
+                [selected]="facility.selected"> {{facility.facilityName}}</option>
+          </select>
+        </div>
+        <div class="col-md-2 textnowrap">
+          <label for="txtSite">Site<span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-4">
+          <input id="txtSite" type="text" [ngClass]="{ 'disabled': isAddSite == true ? false : true }"
+            [readonly]="isAddSite == true ? false : true" [(ngModel)]='txtSite' (keypress)="inputValidator($event)">
+        </div>
+      </div>
+      <br>
+      <br>
+        <div class="row alignitemcenter">
+          <div class="col-md-2 textnowrap">
+            <label for="ddlPackageType">Package Type<span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <select id="ddlPackageType" [(ngModel)]='selectPackageId' (change)="focusFunction()" multiple="multiple">
+              <option class='option' *ngFor='let packageType of packageDetails' [value]="packageType.packageId">
+                {{packageType.packageName}}</option>
+            </select>
+          </div>
+          <div class="col-md-2 textnowrap">
+            <label for="ddlFacility">Duty Manager <br> group mail id<span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <input id="txtdutyManager" type="text"  [(ngModel)]='txtdutyManager' (keypress)="inputValidator($event)">
+          </div>
+        </div>
+        <div class="row alignitemcenter">
+          <div class="col-md-2 textnowrap">
+          </div>
+          <div class="col-md-4">
+          </div>
+          <div class="col-md-2 textnowrap">
+            <label for="ddlFacility">Duty Engineer <br> group mail id<span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <input id="txtDutyEngineer" type="text"  [(ngModel)]='txtDutyEngineer' (keypress)="inputValidator($event)">
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="row alignitemcenter">
+          <div class="col-md-2 textnowrap">
+            <label for="ddlTower">Tower<span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <select id="ddlTower" [ngClass]="{ 'disabled': isCarpet == true ? false : true }" [(ngModel)]='selectTowerId' (change)="onTowerChange()">
+              <option class='option' *ngIf="isCarpet" value="-1">Select</option>
+              <option class='option' *ngIf="!isCarpet" value="-1">NA</option>
+              <option class='option' *ngFor='let tower of towerDetails' [value]="tower.towerId">
+                {{tower.towerName}}</option>
+            </select>
+          </div>
+          <div class="col-md-2 textnowrap">
+            <label for="ddlFloor">Floor<span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <select id="ddlFloor" [ngClass]="{ 'disabled': isCarpet == true ? false : true }" [(ngModel)]='selectFloorId' multiple="multiple">
+              <option class='option' *ngIf="!isCarpet" value="-1">NA</option>
+              <option class='option' *ngFor='let floor of floorDetails' [value]="floor.floorId">
+                {{floor.floorName}}</option>
+            </select>
+          </div>
+        </div>
+      <br />
+      <br />
+      <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn" (click)="SaveSite()">Save</button>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn" data-dismiss="modal" (click)="clearSite()">Clear</button>
+        </div>
+        <div class="col-md-3">
+        </div>
+      </div>
+      <br />
+      <br />
+      <div *ngIf="viewData?.length>0" class="row modalgridDiv">
+        <table class="table table-striped table-hover ">
+          <thead class="table-header">
+            <!-- thead-inverse -->
+            <tr>
+              <th class="cansort" (click)="SortingSite('facilityAliasName')">Site
+                <span
+                  *ngIf="defaultSortSite == false && sortColumnSite == 'facilityAliasName' && sortDirectionSite == 'asc'">▲</span>
+                <span
+                  *ngIf="defaultSortSite == false && sortColumnSite == 'facilityAliasName' && sortDirectionSite == 'desc'">▼</span>
+              </th>
+              <th class="cansort" (click)="SortingSite('Tower')">Tower
+                <span *ngIf="sortColumnSite == 'Tower' && sortDirectionSite == 'asc'">▲</span>
+                <span *ngIf="sortColumnSite == 'Tower' && sortDirectionSite == 'desc'">▼</span>
+              </th>
+              <th (click)="SortingSite('FloorNm')">Floor
+                <span *ngIf="sortColumnSite == 'FloorNm' && sortDirectionSite == 'asc'">▲</span>
+                <span *ngIf="sortColumnSite == 'FloorNm' && sortDirectionSite == 'desc'">▼</span>
+              </th>
+              <th>Packages</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="viewData?.length<=0">
+              <td></td>
+              <td>No Records found</td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="viewData?.length>0">
+              <tr *ngFor="let item of viewData">
+                <td >{{item.facilityAliasName}}</td>
+                <td>{{item.Tower}}</td>
+                <td>{{item.FloorNm}}</td>
+                <td maxlength='5'>{{item.PackageNm}}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="viewData?.length>0"
+        class="row modalgridDiv showPageDiv table-footer">
+        <div class="col-sm-5 pagination">
+          <ul *ngIf="pagerViewSite.pages && pagerViewSite.pages.length" class="pagination" id="paginationtab2">
+            <li [ngClass]="{disabled:pagerViewSite.currentPage === 1}">
+              <a (click)="setPageSite(1)">
+                <<</a> </li> <li [ngClass]="{disabled:pagerViewSite.currentPage === 1}">
+                  <a (click)="setPageSite(pagerViewSite.currentPage - 1)">
+                    <</a> </li> <li *ngFor="let page of pagerViewSite.pages"
+                      [ngClass]="{active:pagerViewSite.currentPage === page}">
+                      <a (click)="setPageSite(page)">{{page}}</a>
+            </li>
+            <li [ngClass]="{disabled:pagerViewSite.currentPage === pagerViewSite.totalPages}">
+              <a (click)="setPageSite(pagerViewSite.currentPage + 1)">></a>
+            </li>
+            <li [ngClass]="{disabled:pagerViewSite.currentPage === pagerViewSite.totalPages}">
+              <a (click)="setPageSite(pagerViewSite.totalPages)">>></a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-5 pagingOptions">
+          <label for="ddlPageItems" class="labelpagingOptions">Show</label>&nbsp;
+          <select id="ddlPageItems" class="optionddl"  [ngModel]="selectedPageSizeSite"
+             (ngModelChange)="onPagingOptionsChangeViewSite($event)">
+            <option [value]="i" *ngFor="let i of pageOptionsSite">{{i}}</option>
+          </select>&nbsp;
+          entries
+        </div>
+        <div class="col-sm-2 textnowrap">
+          <span class="pagerecordcount">{{pagerViewSite.startIndex + 1}} - {{pagerViewSite.endIndex + 1}} of
+            {{pagerViewSite.totalItems}} records </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

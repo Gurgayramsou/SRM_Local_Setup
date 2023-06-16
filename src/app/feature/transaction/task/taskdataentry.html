@@ -1,0 +1,688 @@
+﻿<!-- <title>{{message}}</title> -->
+<div *ngIf="!fullAccess" class="container-fluid">
+  <div *ngIf="loadingSymbol" class="loader"></div>
+  <div [ngClass]="{'overlay':loadingSymbol,'a':!loadingSymbol}">
+      <div class="container-fluid bodyDiv">
+        {{noAccessMessage}}
+      </div>
+  </div>
+</div>
+
+
+<div *ngIf='fullAccess' class="container-fluid">
+  <div *ngIf="loadingSymbol" class="loader"></div>
+  <div [ngClass]="{'overlay':loadingSymbol,'a':!loadingSymbol}">
+    <div class="container-fluid bodyDiv">
+      <!-- div for header -->
+      <div class="row">
+        <span>
+          <h1>{{message}}</h1>
+        </span>
+      </div>
+      <!-- div for create button -->
+      <div class="row buttonPullRight">
+        <!-- <div class="createButtonDiv" (click)="exportAsXLSX()">
+            <div class="createButtonIconDiv">
+                <img class="createButtonIcon" src="../../../../assets/images/download.png" alt="click here to open EnterData">
+              </div>
+          <div class="createButtonValueDiv">
+            Task Master
+          </div>
+        </div>
+        &nbsp;&nbsp; -->
+        <div class="createButtonDiv" (click)="createTask(createTaskModal)">
+          <div class="createButtonIconDiv">
+            <img class="createButtonIcon" src="../../../../assets/images/create.png" alt="click here to open EnterData">
+          </div>
+          <div class="createButtonValueDiv">
+            Enter Data
+          </div>
+        </div>
+      </div>
+      <br />
+      <!-- div for filter & grid -->
+      <div class="row">
+        <!-- div for filter -->
+        <div class="col-sm-2 filteryDiv">
+          <section class="mySection">
+            <div class="row">
+              <div class="col-md-7">
+                <h2>Filters</h2>
+              </div>
+              <div *ngIf="enableClearAll" class="col-md-5 clearAll">
+                <span (click)="clearAllFilter()">Clear all</span>
+              </div>
+            </div>
+            <div class="row filtersheight">
+              <div *ngFor="let fa of filteredArray; let i=index">
+                <div class="filterSelectedValue" (click)="deleteFilter(fa)">
+                  <div class="filterCrossIcon">✕</div>
+                  <div class="filterCrossValue">{{fa.text}}</div>
+                </div>
+              </div>
+              <!-- <div class="showMore">
+              <span>Show more</span>
+            </div> -->
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleUniqueId()" data-toggle="collapse"
+              data-target="#uniqueIdFilter">
+              <div class="col-md-10">
+                <label for="txtUniqueId"  class="labelpagingOptions">Unique Id</label>
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#uniqueIdFilter" *ngIf="!showUniqueId">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open uniqueId filter">
+                </div>
+                <div data-toggle="collapse" data-target="#uniqueIdFilter" *ngIf="showUniqueId">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open uniqueId filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="uniqueIdFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData displayInlineBlock">
+                <span class="displayInlineBlock">
+                  <input id="txtUniqueId" type="text" class="form-control searchInput" [ngbTypeahead]="search"
+                    [(ngModel)]="selectedUniqueId" (selectItem)="selectUniqueId($event)" />
+                </span>
+                <span class="displayInlineBlock searchImage">
+                  <img (click)="searchUniqueId()" class="displayInlineBlock" src="../../../assets/images/search.png" alt="click greaterArrow to open searchIcon">
+                </span>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleDate()" data-toggle="collapse"
+              data-target="#dateFilter">
+              <div class="col-md-10">
+                  <label for="txtDatepicker"  class="labelpagingOptions">Date</label>
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#dateFilter" *ngIf="!showDate">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open Date filter">
+                </div>
+                <div data-toggle="collapse" data-target="#dateFilter" *ngIf="showDate">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Date filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="dateFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData displayInlineBlock">
+                <span class="displayInlineBlock">
+                    <input id="txtDatepicker" class="form-control dateInput" placeholder="yyyy-mm-dd" type="text" name="dpdate"
+                           readonly="readonly" [(ngModel)]="selectedDate" ngbDatepicker [footerTemplate]="footerTemplateDate"
+                           outsideDays="collapsed" #date="ngbDatepicker" (dateSelect)="onDateSelect($event)">
+                  <ng-template #footerTemplateDate>
+                    <hr class="my-0">
+                    <button class="btn btn-sm m-2 float-left"
+                      (click)="selectedDate = selectedDatetoday; date.close();onDateSelect(selectedDate)">Today</button>
+                    <button class="btn btn-secondary btn-sm m-2 float-right" (click)="date.close()">Close</button>
+                  </ng-template>
+                </span>
+                <span class="displayInlineBlock dateImage">
+                  <img class="displayInlineBlock dateIcon" (click)="date.toggle()"
+                    src="../../../../assets/images/calendar.png" alt="click here to open dateIcon">
+                </span>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleVendor()" data-toggle="collapse"
+              data-target="#vendorFilter">
+              <div class="col-md-10 ">
+                Vendor
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#vendorFilter" *ngIf="!showVendor">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open Vendor filter">
+                </div>
+                <div data-toggle="collapse" data-target="#vendorFilter" *ngIf="showVendor">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Vendor filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="vendorFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let vendor of vendorDetails | slice:0:vendorCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="vendor.vendorId" [name]="vendor.vendorName"
+                      id="{{vendor.vendorName}}" [(ngModel)]="vendor.selected" (change)="selectVendor(vendor)" />
+                    <label for="{{vendor.vendorName}}"> {{vendor.vendorName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="vendorDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreVendor()">{{showMoreVendor}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleDutyManager()" data-toggle="collapse"
+              data-target="#dutyManagerFilter">
+              <div class="col-md-10 ">
+                Duty Manager
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#dutyManagerFilter" *ngIf="!showDutyManager">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open Duty Manager filter">
+                </div>
+                <div data-toggle="collapse" data-target="#dutyManagerFilter" *ngIf="showDutyManager">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Duty Manager filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="dutyManagerFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let dutyManager of dutyManagerDetails | slice:0:dutyManagerCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="dutyManager.dutyManagerName" [name]="dutyManager.dutyManagerName"
+                      id="{{dutyManager.dutyManagerName}}" [(ngModel)]="dutyManager.selected"
+                      (change)="selectDutyManager(dutyManager)" />
+                    <label for="{{dutyManager.dutyManagerName}}"> {{dutyManager.dutyManagerName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="dutyManagerDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreDutyManager()">{{showMoreDutyManager}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- <section class="mySection">
+          <div class="row filterHeaderFontWeight" (click)="toggleCity()" data-toggle="collapse"
+            data-target="#cityFilter">
+            <div class="col-md-10">
+              City
+            </div>
+            <div class="col-md-1">
+              <div data-toggle="collapse" data-target="#cityFilter" *ngIf="!showCity">
+                <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg">
+              </div>
+              <div data-toggle="collapse" data-target="#cityFilter" *ngIf="showCity">
+                <img class="arrowIcon" src="../../../assets/images/downArrow.svg">
+              </div>
+            </div>
+          </div>
+          <div class="row collapse" id="cityFilter">
+            <div class="col-md-1"></div>
+            <div class="col-md-11 filterData">
+              <div class="filterDataheight">
+                <div *ngFor="let city of cityDetails | slice:0:cityCount ; let i=index"
+                  class="checkbox checkbox-primary checkbox-inline">
+                  <input type="checkbox" [value]="city.cityId" name="{{city.cityName}}" id="{{city.cityName}}"
+                    [(ngModel)]="city.selected" (change)="selectCity(city)" />
+                  <label for="{{city.cityName}}"> {{city.cityName}} </label>
+                </div>
+              </div>
+              <div *ngIf="cityDetails?.length > filterCount">
+                <span class="showMore" (click)="displayMoreCity()">{{showMoreCity}}</span>
+              </div>
+            </div>
+          </div>
+        </section> -->
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleFacility()" data-toggle="collapse"
+              data-target="#facilityFilter">
+              <div class="col-md-10 ">
+                Site
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#facilityFilter" *ngIf="!showFacility">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open Site filter">
+                </div>
+                <div data-toggle="collapse" data-target="#facilityFilter" *ngIf="showFacility">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Site filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="facilityFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let facility of facilityDetails | slice:0:facilityCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="facility.facilityId" [name]="facility.facilityName"
+                      id="{{facility.facilityName}}" [(ngModel)]="facility.selected"
+                      (change)="selectFacility(facility)" />
+                    <label for="{{facility.facilityName}}"> {{facility.facilityName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="facilityDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreFacility()">{{showMoreFacility}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- <section class="mySection">
+          <div class="row filterHeaderFontWeight" (click)="toggleTower()" data-toggle="collapse"
+            data-target="#towerFilter">
+            <div class="col-md-10 ">
+              Tower
+            </div>
+            <div class="col-md-1">
+              <div data-toggle="collapse" data-target="#towerFilter" *ngIf="!showTower">
+                <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg">
+              </div>
+              <div data-toggle="collapse" data-target="#towerFilter" *ngIf="showTower">
+                <img class="arrowIcon" src="../../../assets/images/downArrow.svg">
+              </div>
+            </div>
+          </div>
+          <div class="row collapse" id="towerFilter">
+            <div class="col-md-1"></div>
+            <div class="col-md-11 filterData">
+              <div class="filterDataheight">
+                <div *ngFor="let tower of towerDetails | slice:0:towerCount; let i=index"
+                  class="checkbox checkbox-primary checkbox-inline">
+                  <input type="checkbox" [value]="tower.towerId" [name]="tower.towerName" id="{{tower.towerName}}"
+                    [(ngModel)]="tower.selected" (change)="selectTower(tower)" />
+                  <label for="{{tower.towerName}}"> {{tower.towerName}} </label>
+                </div>
+              </div>
+              <div *ngIf="towerDetails?.length > filterCount">
+                <span class="showMore" (click)="displayMoreTower()">{{showMoreTower}}</span>
+              </div>
+            </div>
+          </div>
+        </section> -->
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleFrequency()" data-toggle="collapse"
+              data-target="#frequency">
+              <div class="col-md-10">
+                Frequency
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#frequency" *ngIf="!showFrequency">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open Frequency filter">
+                </div>
+                <div data-toggle="collapse" data-target="#frequency" *ngIf="showFrequency">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Frequency filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="frequency">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                    <div *ngFor="let frequency of frequencyDetails| slice:0:frequencyCount ; let i=index"
+                         class="checkbox checkbox-primary checkbox-inline">
+                        <input type="checkbox" [value]="frequency.frequencyId" [name]="frequency.frequencyName"
+                               id="{{frequency.frequencyName}}" [(ngModel)]="frequency.selected"
+                               (change)="selectFrequency(frequency)" />
+                        <label for="{{frequency.frequencyName}}"> {{frequency.frequencyName}} </label>
+                    </div>
+                </div>
+                <div *ngIf="frequencyDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreFrequency()">{{showMoreFrequency}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleTraffic()" data-toggle="collapse"
+              data-target="#trafficFilter">
+              <div class="col-md-10">
+                Traffic
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#trafficFilter" *ngIf="!showTraffic">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open Traffic filter">
+                </div>
+                <div data-toggle="collapse" data-target="#trafficFilter" *ngIf="showTraffic">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Traffic filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="trafficFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let traffic of trafficDetails | slice:0:trafficCount ; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="traffic.trafficId" [name]="traffic.trafficName"
+                      id="{{traffic.trafficName}}" [(ngModel)]="traffic.selected" (change)="selectTraffic(traffic)" />
+                    <label for="{{traffic.trafficName}}"> {{traffic.trafficName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="trafficDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreTraffic()">{{showMoreTraffic}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- div for grid -->
+        <div class="col-sm-10">
+          <div class="row gridDiv horizontalscroll">
+            <table class="table table-striped table-hover ">
+              <thead class="table-header">
+                <!-- thead-inverse -->
+                <tr>
+                  <th>VENDOR</th>
+                  <th class="cansort textnowrap" (click)="sorting('DutyManagerNm')">DUTY MANAGER
+                    <span *ngIf="sortColumn == 'DutyManagerNm' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'DutyManagerNm' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort textnowrap" (click)="sorting('TransactionDt')">DATE
+                    <span *ngIf="sortColumn == 'TransactionDt' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'TransactionDt' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="textnowrap">UNIQUE ID</th>
+                  <th class="textnowrap">SITE</th>
+                  <th class="textnowrap">TOWER</th>
+                  <th class="textnowrap">FREQUENCY</th>
+                  <th class="textnowrap">WORK TYPE</th>
+                  <th class="textnowrap">TRAFFIC</th>
+                  <th class="textnowrap">AREA</th>
+                  <th class="textnowrap">LOCATION</th>
+                  <th class="cansort textnowrap" (click)="sorting('CreatedBy')">CREATED BY
+                    <span *ngIf="sortColumn == 'CreatedBy' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'CreatedBy' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort textnowrap" (click)="sorting('CreateDttm')">CREATED ON
+                    <span *ngIf="defaultSort == false && sortColumn == 'CreateDttm' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="defaultSort == false && sortColumn == 'CreateDttm' && sortDirection == 'desc'">▼</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="taskDataDisplay?.length<=0">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="textnowrap">No Records found</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <ng-container *ngIf="taskDataDisplay?.length>0">
+                  <tr *ngFor="let item of taskDataDisplay">
+                    <td class="textnowrap">{{item.vendorName}}</td>
+                    <td class="textnowrap">{{item.DutyManagerNm}}</td>
+                    <td class="textnowrap">{{item.TransactionDt | date : "dd-MMM-yyyy"}}</td>
+                    <td class="textnowrap">{{item.TaskCd}}</td>
+                    <td class="textnowrap">{{item.facilityName}}</td>
+                    <td class="textnowrap">{{item.TowerNm}}</td>
+                    <td class="textnowrap">{{item.frequencyName}}</td>
+                    <td class="textnowrap">{{item.WorkType}}</td>
+                    <td class="textnowrap">{{item.TrafficType}}</td>
+                    <td class="textnowrap">{{item.Area}}</td>
+                    <td class="overFlow LocationCleanedWidth"><span title="{{item.Location}}">{{item.Location}}</span></td>
+                    <td class="textnowrap">{{item.CreatedBy}}</td>
+                    <td class="textnowrap">{{item.CreateDttm | date : "dd-MMM-yyyy"}}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <br />
+          <div *ngIf="taskDataDisplay?.length>0" class="row gridDiv showPageDiv table-footer">
+            <div class="col-sm-5 pagination">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination" id="paginationtab">
+                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a (click)="setPage(1)">
+                    <<</a> </li> <li [ngClass]="{disabled:pager.currentPage === 1}">
+                      <a (click)="setPage(pager.currentPage - 1)">
+                        <</a> </li> <li *ngFor="let page of pager.pages"
+                          [ngClass]="{active:pager.currentPage === page}">
+                          <a (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(pager.currentPage + 1)">></a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(pager.totalPages)">>></a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-sm-5 pagingOptions">
+              <label for="ddlPageItems" class="labelpagingOptions">Show</label>&nbsp; 
+              <select id="ddlPageItems" class="optionddl"  [ngModel]="selectedPageSize"  (ngModelChange)="onPagingOptionsChange($event)">
+                <option [value]="i" *ngFor="let i of pageOptions">{{i}}</option>
+              </select>&nbsp;
+              entries
+            </div>
+            <div class="col-sm-2 textnowrap">
+              <span class="pagerecordcount">{{pager.startIndex + 1}} - {{this.pager.endIndex + 1}} of
+                {{pager.totalItems}} records </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal pop up for Createing Task -->
+<ng-template #createTaskModal let-modal>
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <span class="modal-title">Submit Task</span>
+    <span class="closebutton glyphicon glyphicon-remove" (click)="dismissCreateTaskModal()"></span>
+    <!-- <img class="closebutton" (click)="dismissCreateTaskModal()" src="../../../../assets/images/close.png"> -->
+  </div>
+
+  <!-- Modal body -->
+  <div *ngIf="loadingSymbolForModal" class="loader"></div>
+  <div [ngClass]="{'overlay':loadingSymbolForModal,'a':!loadingSymbolForModal}">
+    <div class="modal-body">
+      <div class="row alignitemcenter">
+        <div class="col-md-1 textnowrap">
+         
+          <label for="ddlFacility"> Site <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-3">
+            
+          <select id="ddlFacility" [(ngModel)]='facilityId' (change)="onCreateFacilityChange()">
+            <option class='option' value="-1">Select</option>
+            <option class='option' *ngFor='let facility of createFacilityDetails' [value]="facility.facilityId">
+              {{facility.facilityName}}</option>
+          </select>
+        </div>
+        <div class="col-md-1 textnowrap">
+         
+          <label for="ddlTower"> Tower <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-3">
+            
+          <select id="ddlTower" [(ngModel)]='towerId' (change)="onCreateTowerChange()">
+            <option class='option' value="-1">Select</option>
+            <option class='option' *ngFor='let tower of createTowerDetails' [value]="tower.TowerId">
+              {{tower.towerName}}</option>
+          </select>
+        </div>
+        <div class="col-md-1 textnowrap">
+         
+          <label for="ddlFloor"> Floor <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-3 buttonmarginleft">
+            
+          <select id="ddlFloor" [(ngModel)]='floorId' class="floatright">
+            <option class='option' value="-1">Select</option>
+            <option class='option' *ngFor='let floor of createFloorDetails' [value]="floor.FloorId">
+              {{floor.floorName}}</option>
+          </select>
+        </div>
+      </div>      
+      <br />
+      <br />
+      <div class="row alignitemcenter">
+        <div class="col-md-1 textnowrap">
+          <label for="ddlVendor">Vendor <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-3">
+          <select id="ddlVendor" [(ngModel)]='vendorId'>
+            <option class='option' value="-1">Select</option>
+            <option class='option' *ngFor='let vendor of createVendorDetails' [value]="vendor.vendorId">
+              {{vendor.vendorName}}</option>
+          </select>
+        </div>
+        <div class="col-md-1 textnowrap">
+          <label for="txtDate"> Date <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-3 displayInlineBlock">
+          <span class="displayInlineBlock">
+            <input id="txtDate" class="form-control dateInput" placeholder="yyyy-mm-dd" type="text" name="dp" readonly="readonly"
+              [(ngModel)]="periodDate" ngbDatepicker [footerTemplate]="footerTemplate" outsideDays="collapsed" (ngModelChange)="datechange($event)"
+              #d="ngbDatepicker" [maxDate]="{year:year, month: month, day: day }">
+            <ng-template #footerTemplate>
+              <hr class="my-0">
+              <button class="disabled btn btn-sm m-2 float-left" (click)="periodDate = today; d.close()">Today</button>
+              <button class="btn btn-secondary btn-sm m-2 float-right" (click)="d.close()">Close</button>
+            </ng-template>
+          </span>
+          <span class="displayInlineBlock dateImage">
+            <img class="displayInlineBlock dateIcon" (click)="d.toggle()" src="../../../../assets/images/calendar.png" alt="click here to enter date">
+          </span>
+        </div>
+        <!-- <div class="col-md-1 textnowrap">
+          Duty Manager
+        </div>
+        <div class="col-md-3 divmarginleft">
+          <span class="floatright">{{dutyManager}}</span>
+        </div> -->
+        <div class="col-md-4">
+          Duty Manager&nbsp;&nbsp;&nbsp;
+          <span>{{dutyManager}}</span>
+        </div>
+
+      </div>
+      <br />
+      <br />
+      <div class="row alignitemcenter">
+        <div class="col-md-8">
+        </div>        
+        <div class="col-md-2">
+          <button (click)="addTask()" type="button" class="btn floatright">Search</button>
+        </div>
+        <div class="col-md-2 buttonmarginleft">
+          <button type="button" class="btn floatright" (click)="clearSelection()">Clear</button>
+        </div>
+      </div>
+      <br />
+      <br />
+      <div class="row modalgridDiv" *ngIf="noTaskMessage != ''">
+        <div class="taskDataEntryHeader">
+          <span class="boldText"> {{noTaskMessage}} </span>
+        </div>
+      </div>
+      <div class="" *ngIf="taskDetails?.length > 0">
+        <div class="row modalgridDiv horizontalscroll maxHeight" *ngFor="let task of taskDetails; let i=index">
+          <table class="table table-striped table-hover ">
+            <thead class="table-header">
+              <tr>
+                <th class="textnowrap">
+                  <div [ngClass]="{ 'disabled': task.disabled == true ? true : false }"
+                    class="checkbox checkbox-primary checkbox-inline popupcheckbox">
+                    <input type="checkbox" [value]="task.FloorId" [name]="task.FloorNm" id="{{task.FloorNm}}"
+                      (change)="selectAllTaskIds($event)" [(ngModel)]="task.selected" />
+                    <label for="{{task.FloorNm}}"><span class="screenreader">{{task.FloorNm}}</span></label>
+                  </div>
+                </th>
+                <th class="textnowrap">Unique Id</th>
+                <th class="textnowrap">Frequency</th>
+                <th class="textnowrap">Work Type</th>
+                <th class="textnowrap">Traffic</th>
+                <th class="textnowrap">Sq.ft. Cleaned</th>
+                <th class="textnowrap">Location Cleaned</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of task.Task; let i=index">
+                <td class="textnowrap">
+                  <div [ngClass]="{ 'disabled': item.disabled == true ? true : false }"
+                    class="checkbox checkbox-primary checkbox-inline popupcheckbox">
+                    <input type="checkbox" [value]="item.TaskId" [name]="item.TaskId" id="{{item.TaskCd}}"
+                      (change)="selectTaskIds($event)" [(ngModel)]="item.selected" />
+                    <label for="{{item.TaskCd}}"> <span class="screenreader">{{item.TaskCd}}</span></label>
+                  </div>
+                </td>
+                <td class="textnowrap">{{item.TaskCd}}</td>
+                <td class="textnowrap">{{item.frequencyName}}</td>
+                <td class="textnowrap">{{item.WorkType}}</td>
+                <td class="textnowrap">{{item.TrafficType}}</td>
+                <td class="textnowrap">{{item.Area}}</td>
+                <td class="LocationCleanedWidth overFlow"><span title="{{item.Location}}">{{item.Location}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <br />
+        </div>
+      </div>
+      <!-- <div class="row modalgridDiv" *ngIf="taskDetails?.length > 0">
+        <div class="horizontalscroll" *ngFor="let task of taskDetails; let i=index">
+          <span class="taskDataEntryHeader">Floor: {{task.FloorNm}}</span>
+          <div class="horizontalscroll">
+            <table class="table table-striped table-hover ">
+              <thead class="table-header">
+                <tr>
+                  <th class="textnowrap">
+                    <div [ngClass]="{ 'disabled': task.disabled == true ? true : false }"
+                      class="checkbox checkbox-primary checkbox-inline popupcheckbox">
+                      <input type="checkbox" [value]="task.FloorId" [name]="task.FloorNm" id="{{task.FloorNm}}"
+                        (change)="selectAllTaskIds($event)" [(ngModel)]="task.selected" />
+                      <label for="{{task.FloorNm}}"></label>
+                    </div>
+                  </th>
+                  <th class="textnowrap">Unique Id</th>
+                  <th class="textnowrap">Frequency</th>
+                  <th class="textnowrap">Work Type</th>
+                  <th class="textnowrap">Traffic</th>
+                  <th class="textnowrap">Sq.ft. Cleaned</th>
+                  <th class="textnowrap">Location Cleaned</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of task.Task; let i=index">
+                  <td class="textnowrap">
+                    <div [ngClass]="{ 'disabled': item.disabled == true ? true : false }"
+                      class="checkbox checkbox-primary checkbox-inline popupcheckbox">
+                      <input type="checkbox" [value]="item.TaskId" [name]="item.TaskId" id="{{item.TaskCd}}"
+                        (change)="selectTaskIds($event)" [(ngModel)]="item.selected" />
+                      <label for="{{item.TaskCd}}"></label>
+                    </div>
+                  </td>
+                  <td class="textnowrap">{{item.TaskCd}}</td>
+                  <td class="textnowrap">{{item.frequencyName}}</td>
+                  <td class="textnowrap">{{item.WorkType}}</td>
+                  <td class="textnowrap">{{item.TrafficType}}</td>
+                  <td class="textnowrap">{{item.Area}}</td>
+                  <td class="LocationCleanedWidth"><span title="{{item.Location}}">{{item.Location}}</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br />
+        </div>
+      </div> -->
+      <br />
+      <div class="row" *ngIf="taskDetails?.length>0">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-2">
+          <button [ngClass]="{ 'disabled': disableCreateButton == true ? true : false }" type="button" class="btn"
+            (click)="saveTask()">Save</button>
+        </div>
+        <div class="col-md-2">
+          <button [ngClass]="{ 'disabled': disableCreateButton == true ? true : false }" type="button" class="btn"
+            (click)="clearTask()">Clear</button>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

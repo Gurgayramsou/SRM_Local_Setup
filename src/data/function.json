@@ -1,0 +1,27 @@
+[
+    {
+        "functionId": 1,
+        "functionName": "Function 1",
+        "weightage": 10
+    },
+    {
+        "functionId": 2,
+        "functionName": "Function 2",
+        "weightage": 20
+    },
+    {
+        "functionId": 3,
+        "functionName": "Function 3",
+        "weightage": 30
+    },
+    {
+        "functionId": 4,
+        "functionName": "Function 4",
+        "weightage": 25
+    },
+    {
+        "functionId": 5,
+        "functionName": "Function 5",
+        "weightage": 15
+    }
+]

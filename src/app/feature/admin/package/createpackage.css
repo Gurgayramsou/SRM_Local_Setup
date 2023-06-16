@@ -1,0 +1,33 @@
+
+::ng-deep .create .modal-dialog{max-width: 500px !important}
+
+::ng-deep .view .modal-dialog{max-width: 900px !important}
+
+::ng-deep .edit .modal-dialog{max-width: 900px !important}
+::ng-deep .enable .modal-dialog{max-width: 780px !important}
+
+
+.paddingleft{
+    padding-left: 0px;
+}
+.optionalOLAMargin{
+    margin-top: -8px;
+}
+
+
+.modalscroll {
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.functionDetails 
+{
+    color: #034575;
+}
+
+
+
+
+
+

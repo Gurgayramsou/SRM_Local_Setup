@@ -1,0 +1,15 @@
+
+.padding{
+    padding: 10px 10px 10px 25px !important;
+}
+.padding1{
+    padding: 0px 10px 10px 25px !important;
+}
+.alertHeaderPadding{
+    margin-left: 0.8px;
+    padding:10px;
+}
+.buttonmarginleft{
+    margin-left: -18px;
+}
+::ng-deep .alertModalMandatory .modal-dialog{max-width: 350px !important}

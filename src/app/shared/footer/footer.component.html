@@ -1,0 +1,219 @@
+<br />
+<div class="footer container-fluid">
+  <div class="row">
+        <span (click)="showHideFooter()" class="footerButton" style="color: white !important;">
+      {{showHideButtonName}}
+    </span>
+  </div>
+  <div class="row footertext" *ngIf="enableShow">
+        <a class="footerlink" href="https://in.accenture.com/protectingaccenture/data-security/5422-2/"
+            target="_blank">Privacy Policy</a>&nbsp;&nbsp;
+        <a class="footerlink" href="https://www.accenture.com/us-en/about/company-cookies-similar-technology"
+            target="_blank">Cookies Policy</a>&nbsp;&nbsp;
+        <span class="alignCenter">
+            <a class="footerlink" href="" data-toggle="collapse" data-target="#TermsModal" data-backdrop="static"
+                data-keyboard="false" (click)=AddTermsOfUse(TermsModal)>Terms Of Use</a></span>
+        <ng-template #TermsModal let-modal>
+            <div class="modal-header modal-open">
+                <span class="alignCenter" style="text-align:center;font-size:20px;"> {{ ModalPopUpHeader }} </span>
+                <span class="closebutton glyphicon glyphicon-remove" (click)="cancelbtn()"></span>
+                <!-- <div id="TermsModal" class="modal"> -->
+
+                <!-- <div class="modal-header alignCenter"> -->
+                <!-- <button type="button" class="closebutton" data-dismiss="modal" aria-hidden="true">×</button> -->
+                <!-- <b><span class="modal-title" id="TermsModal" style="font-size:24px;color:black;">Terms of Use</span></b> -->
+            </div>
+            <div class="modal-body modal-open modalcontent">
+                <div style="font-size:14px">
+                    <p>Your access to and use of this site is subject to the following terms and conditions and all
+                        applicable laws. By accessing and using this site, you accept the following terms and
+                        conditions, without limitation or qualification.</p>
+                    <br><br>
+                    <p>The information provided on this site is free of charge and for informational purposes and
+                        internal use only. Unless otherwise stated, the contents of this site including, but not limited
+                        to, the text and images contained herein and their arrangement are the property of Accenture.
+                        All trademarks used or referred to in this website are the property of their respective owners.
+                    </p>
+                    <br><br>
+                    <br>
+                    <p>Nothing contained in this site shall be construed as conferring by implication, estoppel, or
+                        otherwise, any license or right to any copyright, patent, trademark or other proprietary
+                        interest of Accenture or any third party. This site and the content provided in this site,
+                        including, but not limited to, graphic images, audio, video, html code, buttons, and text, may
+                        not be copied, reproduced, republished, uploaded, posted, transmitted, or distributed in any
+                        way, without the prior written consent of Accenture, except that you may download, display, and
+                        print one copy of the materials on any single computer solely for your personal, non-commercial
+                        use, provided that you do not modify the material in any way and you keep intact all copyright,
+                        trademark, and other proprietary notices. Links on this site may lead to services or sites not
+                        operated by Accenture. No judgment or warranty is made with respect to such other services or
+                        sites and Accenture takes no responsibility for such other sites or services. A link to another
+                        site or service is not an endorsement of that site or service. Any use you make of the
+                        information provided on this site, or any site or service linked to by this site, is at your own
+                        risk.</p><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br>
+                    <p>This site and its contents are provided “as is” and Accenture makes no representation or warranty
+                        of any kind with respect to this site or any site or service accessible through this site.
+                        Accenture expressly disclaims all express and implied warranties including, but not limited to,
+                        the implied warranties of merchantability, fitness for a particular purpose, title, and
+                        non-infringement. In no event will Accenture be liable to any party for any direct, indirect,
+                        incidental, special, exemplary, consequential, or other damages (including, but not limited to,
+                        lost profits, business interruption, loss of programs or data) without regard to the form of
+                        action and whether in contract, tort, negligence, strict liability, or otherwise, arising out of
+                        or in connection with this site, any content on or accessed through this site or any site
+                        service linked to, or any copying, displaying, or use thereof.</p><br>
+                    <br><br><br>
+                    <br><br>
+                    <br>
+                    <p>Accenture maintains this site in India and you agree that these terms of use and any legal action
+                        or proceeding relating to this site shall be governed by the laws of India without reference to
+                        its choice of law rules. If you attempt to bring any legal proceedings against Accenture you
+                        specifically acknowledge that Accenture is free to choose the jurisdiction of our preference as
+                        to where such action against us may be held. As you have agreed by using this site to choose the
+                        laws of India to govern any such proceedings, we will probably choose to defend any such action
+                        in Bangalore, India and we can make this decision entirely as it suits us, without regard to
+                        where in the world you are located, or from where in the world you visited this site.</p><br>
+                    <br><br><br>
+                    <br><br>
+                    <p>You are responsible for complying with the laws of the jurisdiction from which you are accessing
+                        this site and you agree that you will not access or use the information on this site in
+                        violation of such laws. Unless expressly stated otherwise herein, any information submitted by
+                        you through this site shall be deemed non-confidential and non-proprietary. You represent that
+                        you have the lawful right to submit such information and agree that you will not submit any
+                        information unless you are legally entitled to do so. Because of the open nature of the
+                        Internet, we recommend that you not submit information you consider confidential.</p><br>
+                    <br><br>
+                    <br><br>
+                </div>
+                <div class="alignCenter">
+                    <b><span style="text-align:center;font-size:20px;">Privacy Statement</span></b><br><br><br>
+                </div>
+                <div style="font-size:14px">
+                    <p>This privacy statement (together with our Terms and Conditions) explains how any personal data we
+                        may collect from or about you through the Site, will be processed and protected by Accenture. We
+                        want you to feel secure when visiting the Site and are committed to maintaining your privacy
+                        when doing so. By using the Site, you are consenting to Accenture's use of your data as
+                        described below.
+                    </p>
+                    <br><br>
+                    <br>
+                    <p><b>What information does the Site collect? </b><br>
+                        Accenture collects information via the Site in two ways: (1) directly (for example, when you
+                        provide information to log into the Site or complete a form within the Site), and (2) indirectly
+                        (for example through mobile analytic technology).
+                    </p>
+                    <br><br>
+                    <br>
+                    <p> We may collect and process the following information:</p><br>
+                    <p><b>Automatically Collected Information</b> –The Site may collect certain information
+                        automatically, such as the type of device you use, operating system, the amount of time you
+                        spend in the Site, and information about the way you use the Site. This Site may also use
+                        certain analytics software that enables Accenture to better understand the functionality used in
+                        the Site so that Accenture can continue to improve the Site. You can stop continued collection
+                        of information by stop using the site. However, please note Accenture will retain any previous
+                        usage information collected from the Site.</p><br>
+                    <br><br>
+                    <br>
+                    <p>
+                        We may collect and process the following information:
+                    </p><br>
+                    <li>
+                        With your permission, the Site accesses and stores your Enterprise Id.
+                    </li>
+                    <li>
+                        When you visit the Site, it may collect any information you have made visible to "Everyone".
+                    </li>
+                    <li>
+                        Subject to your settings, the Site may collect information about you when your friends allow
+                        access to and use the Site even if you have not allowed access to this Site.
+                    </li> <br>
+
+                    Any personal information or data will be used by Accenture to share news about our services when we
+                    believe it would be relevant to you. <br><br>
+                    <b>Information provided by you</b> –The Site may collect information that you voluntarily provide,
+                    for example when you register to use the Site using a username and password (if applicable) or when
+                    completing a survey or requesting information. <br><br>
+                    We use this information to provide you with information you request and for other purposes which we
+                    would describe to you at the point where it is collected or which will be obvious to you. For
+                    example: <br><br>
+                    <li> To fulfill your requests for content</li> <br>
+                    <li> For surveys or research questionnaires </li><br>
+                    <li> To personalize your experience in the Site</li> <br>
+                    <li> To determine what is effective about the Site, how it is used by users and how we might improve
+                        it</li> <br>
+                    <li> The Site may post on your wall </li><br>
+                    <li> With your permission, the Site may post on your behalf, including status updates, photos and
+                        more </li><br>
+                    <li> The data collected will be used by Accenture to share news about our services and career
+                        opportunities. You are free to opt out of receiving these alerts at a later date as well</li>
+                    <br>
+
+                    Such information collected by the Site will be collected and used in accordance with the terms of
+                    this privacy statement, the Accenture Privacy Statement, applicable data privacy laws and
+                    Accenture’s internal policies.<br><br>
+                    <b>Does the Site collect precise real time location information of the device?</b><br>
+                    The Site collects information about the location of your device If location information is
+                    collected, we use your location information to measure geographic performance of the Site and to
+                    continue to improve and expand the content we provide, based on geographic location of our end
+                    users.<br><br>
+
+                    <b>Cookies and other tracking technology</b><br>
+                    Please see the Accenture Privacy Statement for a description of what cookies are, how Accenture uses
+                    these and what to do if you don’t want cookies. By using the Site you agree that we can place
+                    cookies on your device as explained in the Accenture Privacy Statement.<br><br>
+
+                    <b>How long do you keep my information for?</b><br>
+                    The information collected through the Site may be used for training purposes and the same will be
+                    deleted once the training is completed. <br><br>
+                    <b>Security</b><br>
+                    We take appropriate steps to maintain the security of personal data collected via the Site. The Site
+                    may, from time to time, contain links to and from the sites of our partner networks, advertisers and
+                    affiliates. If you follow a link to any of these sites, please note that these sites have their own
+                    privacy policies and that we do not accept any responsibility or liability for these policies or
+                    sites. Please check these policies before you submit any personal data to these sites.
+                    <br><br>
+                    <b>Accenture’s Data Privacy Policy 90</b> governs Accenture’s use of your personal data and explains
+                    your rights to inquire about, access and rectify your data and object on legitimate grounds to its
+                    processing. You can exercise those rights by contacting your local Accenture Data Privacy Officer or
+                    by email at <b>dataprivacy@accenture.com.</b>
+                    <br><br>
+                    You are entitled to know whether we hold personal data about you and, if we do, to have access to
+                    that personal data and require it to be corrected if it is inaccurate. You can do this by contacting
+                    the support team. You can exercise your right to prevent marketing communications to you by checking
+                    certain boxes on the forms we use to collect your personal data, or by utilizing opt-out mechanisms
+                    in e-mails we send to you.<br><br>
+                    <b>
+                        Your Consent<br> By using the Site, you are consenting to our processing of your information,
+                        including the use of cookies and other tracking technology, as set out in this privacy
+                        statement.
+                    </b>
+                    <p></p>
+                </div>
+                <div class="alignCenter">
+                    <span style="text-align:center">© 2001 - {{CurrentYear}} Accenture. All Rights Reserved.</span>
+                </div>
+            </div>
+
+        </ng-template>
+    <!-- <input type="button" class="btn btn-primary" value="Hide" style="float:left;margin-left: 80px"/> -->
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="margin-left:100px;">&copy; 2001 - {{CurrentYear}} Accenture. All Rights Reserved. Accenture Confidential. For internal use only.</span>
+
+  </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+

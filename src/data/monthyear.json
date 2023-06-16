@@ -1,0 +1,86 @@
+[
+  {
+    "MonthYearId": 1,
+    "MonthYearNm": "Jan-19",
+    "StartDttm": "2019-01-01 00:00:00",
+    "EndDttm": "2019-01-31 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 2,
+    "MonthYearNm": "Feb-19",
+    "StartDttm": "2019-02-01 00:00:00",
+    "EndDttm": "2019-02-28 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 3,
+    "MonthYearNm": "Mar-19",
+    "StartDttm": "2019-03-01 00:00:00",
+    "EndDttm": "2019-03-31 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 4,
+    "MonthYearNm": "Apr-19",
+    "StartDttm": "2019-04-01 00:00:00",
+    "EndDttm": "2019-04-30 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 5,
+    "MonthYearNm": "May-19",
+    "StartDttm": "2019-05-01 00:00:00",
+    "EndDttm": "2019-05-31 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 6,
+    "MonthYearNm": "Jun-19",
+    "StartDttm": "2019-06-01 00:00:00",
+    "EndDttm": "2019-06-30 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 7,
+    "MonthYearNm": "Jul-19",
+    "StartDttm": "2019-07-01 00:00:00",
+    "EndDttm": "2019-07-31 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 8,
+    "MonthYearNm": "Aug-19",
+    "StartDttm": "2019-08-01 00:00:00",
+    "EndDttm": "2019-08-31 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 9,
+    "MonthYearNm": "Sep-19",
+    "StartDttm": "2019-09-01 00:00:00",
+    "EndDttm": "2019-09-30 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 10,
+    "MonthYearNm": "Oct-19",
+    "StartDttm": "2019-10-01 00:00:00",
+    "EndDttm": "2019-10-31 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 11,
+    "MonthYearNm": "Nov-19",
+    "StartDttm": "2019-11-01 00:00:00",
+    "EndDttm": "2019-11-30 11:59:59",
+    "selected": false
+  },
+  {
+    "MonthYearId": 12,
+    "MonthYearNm": "Dec-19",
+    "StartDttm": "2019-12-01 00:00:00",
+    "EndDttm": "2019-12-31 11:59:59",
+    "selected": false
+  }
+]

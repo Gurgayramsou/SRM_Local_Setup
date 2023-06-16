@@ -1,0 +1,18 @@
+
+::ng-deep .create .modal-dialog{max-width: 500px !important}
+
+::ng-deep .view .modal-dialog{max-width: 900px !important}
+
+::ng-deep .edit .modal-dialog{max-width: 900px !important}
+
+.paddingleft{
+    padding-left: 100px;
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,200 @@
+
+resources:
+- repo: self
+  clean: true
+
+trigger:
+  branches:
+    exclude:
+    - tags/*
+    - refs/heads/master
+    - refs/tags/*
+
+stages:
+- stage: compliance
+  displayName: compliance checks
+  jobs: 
+  - job: unit_test
+    displayName: Compliance
+    pool:
+      vmImage: 'ubuntu-latest'  
+    steps:
+      - task: CIODevOps.http-security-headers-build-release-task.custom-build-release-task.CheckHTTPSecurityHeader@1
+        displayName: 'CheckHTTPSecurityHeader'    
+        enabled: true  
+      - task: REBAR-MetadataBuilder.beta-linux-metadatabuilder-rebar-build-release-task.custom-build-release-task.REBAR-Metadata-Builder@0
+        displayName: 'REBAR Metadata Builder' 
+        enabled: true
+      - task: CIODevOps.asapsecurityscan-build-release-task.custom-build-release-task.ASAPSecurityScanTask@0
+        displayName: ASAPSecurityScanTask
+        inputs:
+         project_id: 20721
+         air_id: 2542
+        enabled: true
+         
+  dependsOn: []
+  # condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+- stage: code_quality
+  displayName: Code Quality Checks
+  jobs: 
+  - job: unit_test
+    displayName: Lint and Unit Test
+    pool:
+      vmImage: 'ubuntu-latest'  
+    steps:
+      - task: Npm@1
+        displayName: 'Npm Install'
+        inputs:
+          verbose: false
+        enabled: true  
+
+      - task: Npm@1
+        displayName: 'npm Lint'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run lint'
+        enabled: false
+
+      - task: Npm@1
+        displayName: 'Npm test'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run test:headless'
+        enabled: false
+
+      - bash: |
+            #!/bin/bash
+            CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+            echo -e "chrome is on \n $CHROME_VERSION"
+            npx webdriver-manager update --gecko=false --versions.chrome $CHROME_VERSION
+        displayName: 'Prep webdriver for agent'
+      - task: Npm@1
+        displayName: 'E2E tests'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run e2e:ci'
+        enabled: false
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results'
+        inputs:
+          testResultsFiles: |
+            reports/*
+            junit/*.xml
+        condition: succeededOrFailed()
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish Code Coverage'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml'
+          reportDirectory: '$(System.DefaultWorkingDirectory)/coverage'
+        condition: succeededOrFailed()
+  dependsOn: []
+  # condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+- stage: functional_validation
+  displayName: Functional Quality Checks
+  dependsOn: []
+  jobs: 
+  - job: functional_checks
+    displayName: Lighthouse checks
+    steps: 
+      - task: Npm@1
+        displayName: 'npm install'
+        inputs:
+          command: custom
+          customCommand: 'ci --no-save '
+      - task: Npm@1
+        displayName: 'npm install xlsx'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'install xlsx'
+      - bash: |
+          #!/bin/bash
+          mkdir -p reports
+          mkdir -p .lighthouseci
+        displayName: 'create reports folder'        
+      - task: Npm@1
+        displayName: npm build cicd
+        enabled: true
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run build'
+      - task: Npm@1
+        displayName: 'Lighthouse Accessibility, SEO and Page Speed'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run lighthouse:ci'
+        enabled: false
+      - task: Npm@1
+        displayName: 'webpack bundle analyzer'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run bundle-report'
+        enabled: false
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish reports'
+        enabled: true
+        inputs:
+          PathtoPublish: 'reports'
+          ArtifactName: 'reports'
+        continueOnError: true
+        condition: succeededOrFailed()
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish reports'
+        enabled: true
+        inputs:
+          PathtoPublish: '.lighthouseci'
+          ArtifactName: 'Lighthouse'
+        continueOnError: true
+        condition: succeededOrFailed()
+    pool:
+      vmImage: 'ubuntu-latest'
+
+- stage: package_artifacts
+  displayName: Package Builds
+  jobs:
+  - job: package
+    displayName: Package
+    pool:
+      vmImage: 'ubuntu-latest'   
+    steps:
+      - task: Npm@1
+        displayName: 'npm install'
+        inputs:
+          command: custom
+
+          customCommand: 'ci --no-save '
+      - task: Npm@1
+        displayName: 'npm install xlsx'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'install xlsx'
+      - task: Npm@1
+        displayName: 'Npm build'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run build:ci'
+        enabled: true
+
+      - task: ArchiveFiles@2
+        displayName: 'Create Zip File Package'
+        inputs:
+          rootFolderOrFile: dist
+          includeRootFolder: false
+          archiveFile: '$(Build.ArtifactStagingDirectory)/devarchfortification-web.zip'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: DevArchForti_Packages'
+        inputs:
+          ArtifactName: 'DevArchForti_Packages'
+  dependsOn: [code_quality, functional_validation]
+  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), startsWith(variables['System.PullRequest.SourceBranch'], 'refs/heads/hotfix'), eq(variables['Build.Reason'], 'Manual')))

@@ -1,0 +1,52 @@
+[
+    {
+        "vendorId": 1,
+        "vendorName": "Sterling & Wilson",
+        "selected": false
+    },
+    {
+        "vendorId": 2,
+        "vendorName": "Rai Power",
+        "selected": false
+    },
+    {
+        "vendorId": 3,
+        "vendorName": "Cummins",
+        "selected": false
+    },
+    {
+        "vendorId": 4,
+        "vendorName": "ANS Electricals",
+        "selected": false
+    },
+    {
+        "vendorId": 5,
+        "vendorName": "Cosmic Power",
+        "selected": false
+    },
+    {
+        "vendorId": 6,
+        "vendorName": "Maruthi Electricals",
+        "selected": false
+    },
+    {
+        "vendorId": 7,
+        "vendorName": "Octane Solutions",
+        "selected": false
+    },
+    {
+        "vendorId": 8,
+        "vendorName": "Trishul Enterprises",
+        "selected": false
+    },
+    {
+        "vendorId": 9,
+        "vendorName": "ETA Engineering",
+        "selected": false
+    },
+    {
+        "vendorId": 10,
+        "vendorName": "Airmech Engineering",
+        "selected": false
+    }
+  ]

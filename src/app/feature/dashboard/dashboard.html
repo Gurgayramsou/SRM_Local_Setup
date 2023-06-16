@@ -1,0 +1,720 @@
+﻿<title>Dashboard</title>
+<div class="container-fluid">
+  <!-- <div class="row container-fluid whitecolor">      
+      <h1>{{message}}</h1>
+  </div> -->
+
+  <div class="container-fluid bodyDiv">
+    <div class="row">
+      <span>
+        <h1>{{message}}</h1>
+      </span>
+    </div>
+    <div class="row buttonPullRight">
+      <div class="createButtonDiv" data-toggle="modal" data-target="#createScoreModal">
+        <div class="createButtonIconDiv">
+          <img class="createButtonIcon" src="../../../assets/images/create.png">
+        </div>
+        <div class="createButtonValueDiv">
+          Create Scores
+        </div>
+      </div>
+      &nbsp;
+      <div class="createButtonDiv" style="padding-left:10px;" data-toggle="modal" data-target="#myFilter">
+        <div class="createButtonValueDiv">
+          Filters
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-sm-3 filteryDiv">
+        <!-- <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary">
+                Create Scores
+              </button> -->
+        <!-- <section class="mySection">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="createButtonDiv" data-toggle="modal" data-target="#myModal">
+                <div class="createButtonIconDiv">
+                  <img class="createButtonIcon" src="../../../assets/images/create.png">
+                </div>
+                <div class="createButtonValueDiv">
+                  Create Scores
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+          </div>
+        </section> -->
+        <section class="mySection">
+          <div class="row">
+            <div class="col-md-8">
+              <h5>Filters</h5>
+            </div>
+            <div *ngIf="enableClearAll" class="col-md-4 clearAll">
+              <span (click)="clearAll()">Clear all</span>
+            </div>
+          </div>
+          <div class="row filterheight">
+            <div *ngFor="let fa of filteredArray; let i=index">
+              <div class="filterSelectedValue" (click)="delete(fa)">
+                <div class="filterCross">✕</div>
+                <div class="filterCrossValue">{{fa.text}}</div>
+              </div>
+            </div>
+            <!-- <div class="showMore">
+              <span>Show more</span>
+            </div> -->
+          </div>
+        </section>
+
+        <section class="mySection">
+          <div class="row">
+            <!-- <div class="col-md-1"></div> -->
+            <!-- <div class="col-md-11 filterHeaderFontWeight" (click)="toggleFacility()">Facility</div> -->
+            <div class="col-md-10 filterHeaderFontWeight" (click)="toggleFacility()" data-toggle="collapse"
+              data-target="#facilityFilter">Facility
+            </div>
+            <div class="col-md-1" *ngIf="!showFacility">
+              &#9658;
+            </div>
+            <div class="col-md-1" *ngIf="showFacility">
+              &#9660;
+            </div>
+          </div>
+          <!-- <div class="row" *ngIf="facilityShow"></div> -->
+          <div class="row collapse" id="facilityFilter">
+            <div class="col-md-1"></div>
+            <div class="col-md-11 filterDataheight">
+              <div *ngFor="let facility of facilityDetails; let i=index">
+               
+                <input type="checkbox" [value]="facility.facilityId" [name]="facility.facilityName"
+                  (change)="selectFacility($event)" [checked]="unselect" /> {{facility.facilityName}}
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="mySection">
+          <div class="row">
+            <div class="col-md-10 filterHeaderFontWeight" (click)="toggleVendor()" data-toggle="collapse"
+              data-target="#vendor">
+              Vendor
+            </div>
+            <div class="col-md-1" *ngIf="!showVendor">
+              &#9658;
+            </div>
+            <div class="col-md-1" *ngIf="showVendor">
+              &#9660;
+            </div>
+          </div>
+          <div class="row collapse" id="vendor">
+            <div class="col-md-1"></div>
+            <div class="col-md-11 filterDataheight">
+              <div *ngFor="let vendor of vendorDetails | slice:0:vendorCount ; let i=index">
+                <input type="checkbox" [value]="vendor.vendorId" [name]="vendor.vendorName"
+                  [(ngModel)]="vendor.selected" (change)="selectVendor(vendor)" />
+                {{vendor.vendorName}}
+              </div>
+              <div *ngIf="vendorDetails?.length > 5">
+                <span class="showMore" (click)="displayMoreVendor()">{{showMoreVendor}}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="mySection">
+          <div class="row">
+            <div class="col-md-10 filterHeaderFontWeight" (click)="toggleFrequency()" data-toggle="collapse"
+              data-target="#frequency">
+              Frequency
+            </div>
+            <div class="col-md-1" *ngIf="!showFrequency">
+              &#9658;
+            </div>
+            <div class="col-md-1" *ngIf="showFrequency">
+              &#9660;
+            </div>
+          </div>
+          <div class="row collapse" id="frequency">
+            <div class="col-md-1"></div>
+            <div class="col-md-11 filterDataheight">
+              <div *ngFor="let frequency of frequencyDetails; let i=index">
+                <input type="checkbox" [value]="frequency.frequencyId" [name]="frequency.frequencyName"
+                  (change)="selectFrequency($event)" [checked]="unselect" />
+                {{frequency.frequencyName}}
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="mySection">
+          <div class="row">
+            <div class="col-md-10 filterHeaderFontWeight" (click)="toggleStatus()" data-toggle="collapse"
+              data-target="#status">
+              Status
+            </div>
+            <div class="col-md-1" *ngIf="!showStatus">
+              &#9658;
+            </div>
+            <div class="col-md-1" *ngIf="showStatus">
+              &#9660;
+            </div>
+          </div>
+          <div class="row collapse" id="status">
+            <div class="col-md-1"></div>
+            <div class="col-md-11 filterDataheight">
+              <div *ngFor="let status of statusDetails; let i=index">
+                <input type="checkbox" [value]="status.statusId" [name]="status.statusName"
+                  (change)="selectStatus($event)" [checked]="unselect" />
+                {{status.statusName}}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="col-sm-9">
+        <div class="row gridDiv showOptions">
+          Show 
+          <select [ngModel]="selectedPageSize" (ngModelChange)="onOptionsChange($event)">
+            <option [value]="i" *ngFor="let i of pageOptions">{{i}}</option>
+          </select> &nbsp;
+          entries
+        </div>
+        <div class="row gridDiv">
+        </div>
+        <div class="row gridDiv">
+          <table class="table table-striped tableSS-hover ">
+            <thead class="table-header-SS">
+              <!-- thead-inverse -->
+              <tr>
+                <th>
+                  <div><span style="vertical-align:super;">PACKAGE ID&nbsp;</span>
+                    <div style="display:inline-table;" *ngIf="sortColumn != 'package'">
+                      <div class="arrow-up">
+                      </div>
+                      <div class="arrow-down">
+                      </div>
+                    </div>
+                    <div style="display:inline-table;" *ngIf="!defaultSort">
+                      <div class="arrow-up" *ngIf="sortColumn == 'package' && sortDirection == 'asc'">
+                      </div>
+                      <div class="arrow-down" *ngIf="sortColumn == 'package' && sortDirection == 'desc'">
+                      </div>
+                    </div>
+                  </div>
+                </th>
+                <th (click)="sorting('facility')">
+                  <div><span style="vertical-align:super;">FACILITY&nbsp;</span>
+                    <div style="display:inline-table;" *ngIf="defaultSort || sortColumn != 'facility'">
+                      <div class="arrow-up">
+                      </div>
+                      <div class="arrow-down">
+                      </div>
+                    </div>
+                    <div style="display:inline-table;" *ngIf="!defaultSort">
+                      <div class="arrow-up" *ngIf="sortColumn == 'facility' && sortDirection == 'asc'"
+                        style="margin-bottom:8px;">
+                      </div>
+                      <div class="arrow-down" *ngIf="sortColumn == 'facility' && sortDirection == 'desc'">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <a>
+                    <span *ngIf="sortColumn == 'facility' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'facility' && sortDirection == 'desc'">▼</span>
+                  </a>                   -->
+                </th>
+                <th (click)="sorting('monthyear')">MONTH YEAR
+                  <span *ngIf="sortColumn == 'monthyear' && sortDirection == 'asc'">▲</span>
+                  <span *ngIf="sortColumn == 'monthyear' && sortDirection == 'desc'">▼</span>
+                </th>
+                <th>STATUS</th>
+                <th>VENDOR</th>
+                <th>DATE</th>
+                <th>EDIT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of userData1">
+                <td>{{item.packageCode}}</td>
+                <td>{{item.facility}}</td>
+                <td>{{item.monthYear | date}}</td>
+                <td>{{item.status}}</td>
+                <td>{{item.vendor}}</td>
+                <td class="textnowrap">{{item.date}}</td>
+                <td><img class="editIcon" src="../../../assets/images/icon-edit.png"
+                    (click)="editScore(editScoreModal,item.packageId)"></td>
+              </tr>
+            </tbody>
+            <!-- <tfoot>
+              <tr>
+                <td colspan = "7">
+                    <div class="row gridDiv showPageDiv" style="background-color: #5B9EA4;width: 100%">
+                        <div class="col-sm-10 pagination">
+                          <ul *ngIf="pager.pages && pager.pages.length" class="pagination" id="paginationtab">
+                            <li [ngClass]="{disabled:pager.currentPage === 1}">
+                              <a (click)="setPage(1)">
+                                <<</a> </li> <li [ngClass]="{disabled:pager.currentPage === 1}">
+                                  <a (click)="setPage(pager.currentPage - 1)">
+                                    <</a> </li> <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                                      <a (click)="setPage(page)">{{page}}</a>
+                            </li>
+                            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                              <a (click)="setPage(pager.currentPage + 1)">></a>
+                            </li>
+                            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                              <a (click)="setPage(pager.totalPages)">>></a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="col-sm-2 textnowrap">
+                          <span style="color: white;float: right">{{pager.startIndex + 1}} - {{this.pager.endIndex + 1}} of
+                            {{pager.totalItems}} records </span>
+              
+                        </div>
+                      </div>
+                </td>
+              </tr>
+            </tfoot> -->
+          </table>
+        </div>
+        <div class="row gridDiv showPageDiv table-footer-SS">
+          <div class="col-sm-10 pagination">
+            <ul *ngIf="pager.pages && pager.pages.length" class="pagination" id="paginationtab">
+              <li [ngClass]="{disabled:pager.currentPage === 1}">
+                <a (click)="setPage(1)">
+                  <<</a> </li> <li [ngClass]="{disabled:pager.currentPage === 1}">
+                    <a (click)="setPage(pager.currentPage - 1)">
+                      <</a> </li> <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                        <a (click)="setPage(page)">{{page}}</a>
+              </li>
+              <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a (click)="setPage(pager.currentPage + 1)">></a>
+              </li>
+              <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a (click)="setPage(pager.totalPages)">>></a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-sm-2 textnowrap">
+            <span style="color: white;float: right">{{pager.startIndex + 1}} - {{this.pager.endIndex + 1}} of
+              {{pager.totalItems}} records </span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- The Modal -->
+<div class="modal right fade" id="createScoreModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Create Scores</h4>
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-2 textnowrap">
+            Package Type
+          </div>
+          <div class="col-md-4">
+            <select class='ddl' required (change)='onOptionsSelected($event)'>
+              <option class='option' value="-1" selected="true">Select</option>
+              <option class='option' *ngFor='let packageType of packageTypeDetails' [value]="packageType.packageId">
+                {{packageType.packageName}}</option>
+            </select>
+            
+          </div>
+          <div class="col-md-2 textnowrap">
+            Period Picker
+          </div>
+          <div class="col-md-4">
+            <select class='ddl' required [(ngModel)]='optionSelected' (ngModelChange)='onOptionsSelected($event)'>
+              <option class='option' value="-1" selected="true">Select</option>
+              <option class='option' *ngFor='let option of options' [value]="option">{{option}}</option>
+            </select>
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-md-2 textnowrap">
+            Vendor Name
+          </div>
+          <div class="col-md-4">
+            <select class='ddl' required (ngModelChange)='onOptionsSelected($event)'>
+              <option class='option' value="-1" selected="true">Select</option>
+              <option class='option' *ngFor='let vendor of vendorDetails' [value]="vendor.vendorId">
+                {{vendor.vendorName}}</option>
+            </select>
+          </div>
+          <div class="col-md-2 textnowrap">
+            Facility
+          </div>
+          <div class="col-md-4">
+            <select class='ddl' [(ngModel)]='facilityId' required (ngModelChange)='onOptionsSelected($event)'>
+              <option class='option' value="-1">Select</option>
+              <option class='option' *ngFor='let facility of facilityDetails' [value]="facility.facilityId">
+                {{facility.facilityName}}</option>
+            </select>
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-md-3">
+          </div>
+          <div class="col-md-2">
+            <button (click)="createScore(facilityId)" type="button" class="btn buttonSS"
+              #createScoreDiv>Select</button>
+          </div>
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn buttonSS">Cancel</button>
+          </div>
+          <div class="col-md-4">
+          </div>
+        </div>
+
+        <div>
+          <ng-template #createScoreDiv>Else this div will be shown</ng-template>
+        </div>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="myFilter">
+  <div class="modal-dialog myFilter">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Filters</h4>
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="row" style="padding-right:16px;padding-left:5px;">
+          <div class="col-sm-12 filteryDiv">
+            <section class="mySection">
+              <div class="row">
+                <div class="col-md-8">
+                  <h5>Filters</h5>
+                </div>
+                <div *ngIf="enableClearAll" class="col-md-4 clearAll">
+                  <span (click)="clearAll()">Clear all</span>
+                </div>
+              </div>
+              <div class="row filterheight">
+                <div *ngFor="let fa of filteredArray; let i=index">
+                  <div class="filterSelectedValue" (click)="delete(fa)">
+                    <div class="filterCross">✕</div>
+                    <div class="filterCrossValue">{{fa.text}}</div>
+                  </div>
+                </div>
+                <!-- <div class="showMore">
+                        <span>Show more</span>
+                      </div> -->
+              </div>
+            </section>
+            <section class="mySection">
+              <div class="row">
+                <div class="col-md-10 filterHeaderFontWeight" (click)="togglePackageType()" data-toggle="collapse"
+                  data-target="#packageTypeFilter">
+                  Package Type
+                </div>
+                <div class="col-md-1" *ngIf="!showPackageType">
+                  <!-- &#9658; -->
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg">
+                </div>
+                <div class="col-md-1" *ngIf="showPackageType">
+                  <!-- &#9660; -->
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg">
+                </div>
+              </div>
+              <div class="row collapse" id="packageTypeFilter">
+                <div class="col-md-1"></div>
+                <div class="col-md-11 filterDataheight">
+                  <div *ngFor="let package of packageTypeDetails | slice:0:packageCount; let i=index">
+                    <input type="checkbox" [value]="package.packageId" name="{{package.packageName}}"
+                      [(ngModel)]="package.selected" (change)="selectPackageType(package)" />
+                    {{package.packageName}}
+                    <!-- <input type="checkbox" [(ngModel)]="package.id" checked="false" [value]="package.id"/> {{package.value}} -->
+                  </div>
+                  <div *ngIf="packageTypeDetails?.length > 5">
+                    <span class="showMore" (click)="displayMorePackage()">{{showMorePackage}}</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="mySection">
+              <div class="row">
+                <!-- <div class="col-md-1"></div> -->
+                <!-- <div class="col-md-11 filterHeaderFontWeight" (click)="toggleFacility()">Facility</div> -->
+                <div class="col-md-10 filterHeaderFontWeight" (click)="toggleFacility()" data-toggle="collapse"
+                  data-target="#facilityFilter">Facility
+                </div>
+                <div class="col-md-1" *ngIf="!showFacility">
+                  &#9658;
+                </div>
+                <div class="col-md-1" *ngIf="showFacility">
+                  &#9660;
+                </div>
+              </div>
+              <!-- <div class="row" *ngIf="facilityShow"></div> -->
+              <div class="row collapse" id="facilityFilter">
+                <div class="col-md-1"></div>
+                <div class="col-md-11 filterDataheight">
+                  <div *ngFor="let facility of facilityDetails; let i=index">
+                    <input type="checkbox" [value]="facility.facilityId" [name]="facility.facilityName"
+                      (change)="selectFacility($event)" [checked]="unselect" /> {{facility.facilityName}}
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="mySection">
+              <div class="row">
+                <div class="col-md-10 filterHeaderFontWeight" (click)="toggleVendor()" data-toggle="collapse"
+                  data-target="#vendor">
+                  Vendor
+                </div>
+                <div class="col-md-1" *ngIf="!showVendor">
+                  &#9658;
+                </div>
+                <div class="col-md-1" *ngIf="showVendor">
+                  &#9660;
+                </div>
+              </div>
+              <div class="row collapse" id="vendor">
+                <div class="col-md-1"></div>
+                <div class="col-md-11 filterDataheight">
+                  <div *ngFor="let vendor of vendorDetails | slice:0:vendorCount ; let i=index">
+                    <input type="checkbox" [value]="vendor.vendorId" [name]="vendor.vendorName"
+                      [(ngModel)]="vendor.selected" (change)="selectVendor(vendor)" />
+                    {{vendor.vendorName}}
+                  </div>
+                  <div *ngIf="vendorDetails?.length > 5">
+                    <span class="showMore" (click)="displayMoreVendor()">{{showMoreVendor}}</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="mySection">
+              <div class="row">
+                <div class="col-md-10 filterHeaderFontWeight" (click)="toggleFrequency()" data-toggle="collapse"
+                  data-target="#frequency">
+                  Frequency
+                </div>
+                <div class="col-md-1" *ngIf="!showFrequency">
+                  &#9658;
+                </div>
+                <div class="col-md-1" *ngIf="showFrequency">
+                  &#9660;
+                </div>
+              </div>
+              <div class="row collapse" id="frequency">
+                <div class="col-md-1"></div>
+                <div class="col-md-11 filterDataheight">
+                  <div *ngFor="let frequency of frequencyDetails; let i=index">
+                    <input type="checkbox" [value]="frequency.frequencyId" [name]="frequency.frequencyName"
+                      (change)="selectFrequency($event)" [checked]="unselect" />
+                    {{frequency.frequencyName}}
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #editScoreModal let-modal>
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <h4 class="modal-title">Create Scores</h4>
+    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+  </div>
+
+  <!-- Modal body -->
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-2 textnowrap">
+        Package Type
+      </div>
+      <div class="col-md-4">
+        <select class='ddl' required (change)='onOptionsSelected($event)'>
+          <option class='option' value="-1" selected="true">Select</option>
+          <option class='option' *ngFor='let packageType of packageTypeDetails' [value]="packageType.packageId">
+            {{packageType.packageName}}</option>
+        </select>
+      </div>
+      <div class="col-md-2 textnowrap">
+        Period Picker
+      </div>
+      <div class="col-md-4">
+        <select class='ddl' required [(ngModel)]='optionSelected' (ngModelChange)='onOptionsSelected($event)'>
+          <option class='option' value="-1" selected="true">Select</option>
+          <option class='option' *ngFor='let option of options' [value]="option">{{option}}</option>
+        </select>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-md-2 textnowrap">
+        Vendor Name
+      </div>
+      <div class="col-md-4">
+        <select class='ddl' required (ngModelChange)='onOptionsSelected($event)'>
+          <option class='option' value="-1" selected="true">Select</option>
+          <option class='option' *ngFor='let vendor of vendorDetails' [value]="vendor.vendorId">
+            {{vendor.vendorName}}</option>
+        </select>
+      </div>
+      <div class="col-md-2 textnowrap">
+        Facility
+      </div>
+      <div class="col-md-4">
+        <select class='ddl' [(ngModel)]='facilityId' required (ngModelChange)='onOptionsSelected($event)'>
+          <option class='option' value="-1">Select</option>
+          <option class='option' *ngFor='let facility of facilityDetails' [value]="facility.facilityId">
+            {{facility.facilityName}}</option>
+        </select>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-primary"
+          #createScoreDiv>Select</button>
+      </div>
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-primary">Cancel</button>
+      </div>
+      <div class="col-md-4">
+      </div>
+    </div>
+
+    <div>
+      <ng-template #createScoreDiv>Else this div will be shown</ng-template>
+    </div>
+
+  </div>
+
+  <!-- Modal footer -->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #alert let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Message</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{alertMessage}}&hellip;</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+
+</ng-template>
+
+
+
+<!-- <div class="container">
+
+
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+            Collapsible Group Item #1
+          </a>
+        </h4>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse in">
+        <div class="panel-body">
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
+          officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf
+          moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim
+          keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
+          butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably
+          haven't heard of them accusamus labore sustainable VHS.
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+            Collapsible Group Item #2
+          </a>
+        </h4>
+      </div>
+      <div id="collapseTwo" class="panel-collapse collapse">
+        <div class="panel-body">
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
+          officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf
+          moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim
+          keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
+          butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably
+          haven't heard of them accusamus labore sustainable VHS.
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+            Collapsible Group Item #3
+          </a>
+        </h4>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse">
+        <div class="panel-body">
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
+          officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf
+          moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim
+          keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
+          butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably
+          haven't heard of them accusamus labore sustainable VHS.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div> -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->

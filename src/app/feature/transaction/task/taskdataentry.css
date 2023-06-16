@@ -1,0 +1,30 @@
+::ng-deep .edit .modal-dialog {max-width: 900px !important}
+.modal-content {width: 800px !important}
+
+
+.buttonmarginleft{
+    margin-left: -32px;
+}
+
+.divmarginleft{
+    margin-left: -30px;
+}
+
+
+.popupcheckbox input[type="checkbox"]:checked + label::after{
+    margin-top: 0.1em;
+}
+.LocationCleanedWidth{
+    max-width: 200px !important;
+}
+.floatright{
+    float: right;
+}
+
+.maxHeight{
+    max-height: 1000px;
+}
+
+
+
+

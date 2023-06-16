@@ -1,0 +1,152 @@
+[
+  {
+      "facilityId": 1,
+      "facilityName": "BDC1",
+      "selected": false
+  },
+  {
+      "facilityId": 2,
+      "facilityName": "BDC2",
+      "selected": false
+  },
+  {
+      "facilityId": 3,
+      "facilityName": "BDC3",
+      "selected": false
+  },
+  {
+      "facilityId": 4,
+      "facilityName": "BDC4",
+      "selected": false
+  },
+  {
+      "facilityId": 5,
+      "facilityName": "BDC5",
+      "selected": false
+  },
+  {
+      "facilityId": 6,
+      "facilityName": "BDC6",
+      "selected": false
+  },
+  {
+      "facilityId": 7,
+      "facilityName": "BDC7",
+      "selected": false
+  },
+  {
+      "facilityId": 8,
+      "facilityName": "BDC8",
+      "selected": false
+  },
+  {
+      "facilityId": 9,
+      "facilityName": "BDC9",
+      "selected": false
+  },
+  {
+      "facilityId": 10,
+      "facilityName": "BDC10",
+      "selected": false
+  },
+  {
+    "facilityId": 1,
+    "facilityName": "BDC1",
+    "selected": false
+},
+{
+    "facilityId": 2,
+    "facilityName": "BDC2",
+    "selected": false
+},
+{
+    "facilityId": 3,
+    "facilityName": "BDC3",
+    "selected": false
+},
+{
+    "facilityId": 4,
+    "facilityName": "BDC4",
+    "selected": false
+},
+{
+    "facilityId": 5,
+    "facilityName": "BDC5",
+    "selected": false
+},
+{
+    "facilityId": 6,
+    "facilityName": "BDC6",
+    "selected": false
+},
+{
+    "facilityId": 7,
+    "facilityName": "BDC7",
+    "selected": false
+},
+{
+    "facilityId": 8,
+    "facilityName": "BDC8",
+    "selected": false
+},
+{
+    "facilityId": 9,
+    "facilityName": "BDC9",
+    "selected": false
+},
+{
+    "facilityId": 10,
+    "facilityName": "BDC10",
+    "selected": false
+},
+{
+    "facilityId": 1,
+    "facilityName": "BDC1",
+    "selected": false
+},
+{
+    "facilityId": 2,
+    "facilityName": "BDC2",
+    "selected": false
+},
+{
+    "facilityId": 3,
+    "facilityName": "BDC3",
+    "selected": false
+},
+{
+    "facilityId": 4,
+    "facilityName": "BDC4",
+    "selected": false
+},
+{
+    "facilityId": 5,
+    "facilityName": "BDC5",
+    "selected": false
+},
+{
+    "facilityId": 6,
+    "facilityName": "BDC6",
+    "selected": false
+},
+{
+    "facilityId": 7,
+    "facilityName": "BDC7",
+    "selected": false
+},
+{
+    "facilityId": 8,
+    "facilityName": "BDC8",
+    "selected": false
+},
+{
+    "facilityId": 9,
+    "facilityName": "BDC9",
+    "selected": false
+},
+{
+    "facilityId": 10,
+    "facilityName": "BDC10",
+    "selected": false
+}
+]

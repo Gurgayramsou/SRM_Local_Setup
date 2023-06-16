@@ -1,0 +1,59 @@
+<div id="header">
+  <div>
+    <div class="topBanner">
+      <div class="greaterThan1">
+        <img src="../../../assets/images/AccentureLogo.png" alt="" style="display: none" />       
+      </div>
+      <div class='userinfo'>
+        <span id="welcome" style="margin-right: 5px;"></span>
+        <img class="img-circle app-profile-image" src="../../../assets/images/defaultprofilephoto.png"
+          alt="Profile Picture" style="width: 30px; height: 30px; margin-top: -9px; margin-right: 31px;">
+        <a id="nav_list"></a>
+      </div>
+    </div>
+  </div>
+  <div class="Banner">
+    <div class="wrapperOverlay">
+      <img src="../../../assets/images/greaterthan_green.png" class="greaterThan" alt="" />
+      <div class="bannerTagLines">
+        Service Relationship management
+      </div>
+    </div>   
+  </div>
+  <div *ngIf="(isVisible === false && isNotAuthorized === true)">
+    <!--<div style="margin-left:0px;margin-top:120px">-->
+      <div style="padding:50px;color:coral">
+        "You are not authorized to access the application. Please check with admin to get access."   
+      </div>  
+    <!--</div>-->
+   
+</div>
+  <div>
+    <!--ng-model="$root.selectedEntity" ng-init="$root.selectedEntity = true"-->
+    <!-- STARTS NAVIGATION -->
+    <!--CHANGES IMPLEMENTED FOR LEFT NAV PANEL TO FIX THE FREEZE ISSUE-->
+    <nav class="pushmenu pushmenu-left" style="display: none">
+      <ul class="accordion">
+        <li *ngFor="let menu of menuMasterDetails">                    
+          <a id="{{menu.menuCode}}toggle">
+            {{menu.menuCode}}
+            <span style="padding-left: 25px; font-size: 20px" [ngClass]="{'glyphicon': ( menu.menuCode == 'Logout' || menu.menuCode == 'Reports' || menu.menuCode == 'Admin' || menu.menuCode == 'Transaction') ? true : false, 'glyphicon-cog': menu.menuCode == 'Admin' ? true : false,
+            'glyphicon-shopping-cart': menu.menuCode == 'Transaction' ? true : false, 
+            'glyphicon-stats': menu.menuCode == 'Reports' ? true : false,
+            'glyphicon-log-out': menu.menuCode == 'Logout' ? true : false }"></span>
+          </a>           
+          <ul *ngIf="menu.menuCode == 'Reports'"  class="inner" id="{{menu.menuCode}}Menu1">
+            <li *ngFor="let m of menu.subMenu | orderBy: 'MenuOrder'">
+              <a id="{{m.subMenuCode}}" class="nav-link" target="_blank" (click)="reportURLs(m.subMenuCode)">{{m.subMenuCode}}</a>
+            </li>
+          </ul>
+          <ul *ngIf="menu.menuCode != 'Reports'"  class="inner" id="{{menu.menuCode}}Menu1">
+            <li *ngFor="let m of menu.subMenu | orderBy: 'MenuOrder'">
+              <a id="{{m.subMenuCode}}" class="nav-link" routerLink="{{m.subMenuURL}}">{{m.subMenuCode}}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

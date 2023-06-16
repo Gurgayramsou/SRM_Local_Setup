@@ -1,0 +1,140 @@
+#user {
+    min-width: 150px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 60px;
+    width: 350px;
+}
+#logo {
+    font: 20px 'GraphikRegular' !important;
+    color: white;
+    text-transform: uppercase;
+    padding-right: 20px;
+    margin-left: 125px;
+    /* position: absolute;
+    float: right; */
+    
+}
+#logo:before {
+    content: 'Service Relationship Management';
+    font-weight: bold;
+    color: black
+}
+#AccLogoContainer {
+    float: left;
+}
+#AccLogoImage {
+    width: 140px;
+    margin-left: 18%;
+    margin-top: 7%;
+}
+#header {
+    width: 100%;
+    height: 115px;
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    /* text-align: center; */
+    /* background: url('../../../assets/images/top-hdr.png') no-repeat center; */
+    background-size: cover; 
+    box-shadow:0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+}
+#user #welcome {
+    color: black;
+    float: left;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: sans-serif !important;
+    margin-top: 8%;
+}
+.img-circle {
+    border-radius: 50%;
+}
+.center-block {
+    display: block;
+    /* margin-right: auto;
+    margin-left: auto;
+    margin-top: 6px; */
+}
+img {
+    vertical-align: middle;
+    border: 0;
+}
+
+/* Banner Changes - Start */
+.Banner {
+    position: relative;
+    background : url('../../../assets/images/Banner.jpg');
+    background-color:#eceeef ; 
+    top:0;      
+}
+.topBanner {
+    position: relative;
+    /* background: #f9fafc url('../../../assets/images/defaultprofilephoto.png') right bottom no-repeat; */
+    /* background-color:#eceeef ; */
+    height: 35px;      
+}
+.userinfo
+{
+    float: right;
+    font: bold 12px 'GraphikRegular', Arial, Gadget, sans-serif;
+    text-transform:capitalize;
+    margin-left: 20px;
+    padding: 10px;
+    color: #464a4c;
+}
+
+.wrapperOverlay {   
+    display: inline-block;
+    padding-right: 20px;
+    padding-left: 50px;    
+}
+
+.Banner:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+.bannerTagLines {
+    font: bold 16px 'GraphikRegular', Arial, Gadget, sans-serif;
+    text-transform: uppercase;
+    margin-left: 20px;
+    padding-top: 30px;
+    display: inline-block;
+    color:#0c0c0c;
+}
+
+.greaterThan {
+    float: left;
+    height: 81px;
+}
+.greaterThan1 {
+    float: left;
+    height: 40px;
+}
+/* .Admin
+{
+    background: url(../../../assets/images/Admin.png) no-repeat 256px center;
+}
+.Transaction
+{
+    background: url(../../../assets/images/Transaction.png) no-repeat 256px center;
+}
+.Reports
+{
+    background: url(../../../assets/images/reports.png) no-repeat 256px center;
+} */
+/* .Logout
+{
+    background: url(../../../assets/images/Logout.png) no-repeat 256px center;
+} */
+.cross { background:url(../../../assets/images/cross.png) no-repeat left top !important; 
+    }
+/* Banner Changes - End */

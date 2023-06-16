@@ -1,0 +1,10 @@
+# ignore these module as these are being used as the depenedency in other node_modules
+node_modules/jsrsasign
+node_modules/lexical-scope
+node_modules/webpack-dev-server
+node_modules/tether
+node_modules/selenium-webdriver
+node_modules/webdriver-js-extender
+node_modules/jquery
+node_modules/js-base64
+node_modules/bootstrap

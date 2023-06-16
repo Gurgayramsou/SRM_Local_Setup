@@ -1,0 +1,12 @@
+[
+  {
+      "countryId": 1,
+      "countryName": "India",
+      "selected": false
+  },
+  {
+      "countryId": 2,
+      "countryName": "USA",
+      "selected": false
+  }
+]

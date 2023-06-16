@@ -1,0 +1,930 @@
+﻿<!-- <title>{{message}}</title> -->
+<div *ngIf="!fullAccess" class="container-fluid">
+  <div *ngIf="loadingSymbol" class="loader"></div>
+  <div [ngClass]="{'overlay':loadingSymbol,'a':!loadingSymbol}">
+    <div class="container-fluid bodyDiv">
+      {{noAccessMessage}}
+    </div>
+  </div>
+</div>
+<div *ngIf='fullAccess' class="container-fluid">
+  <div *ngIf="loadingSymbol" class="loader"></div>
+  <div [ngClass]="{'overlay disabled':loadingSymbol,'a':!loadingSymbol}">
+    <div class="container-fluid bodyDiv">
+      <!-- div for header -->
+      <div class="row">
+        <span>
+          <h1>{{message}}</h1>
+        </span>
+      </div>
+      <!-- div for create button -->
+      <div class="row buttonPullRight">
+        <div class="createButtonDiv" (click)="createPackage(createPackageModal)">
+          <div class="createButtonIconDiv">
+            <img class="createButtonIcon" src="../../../assets/images/create.png" alt="click here to create a Package">
+            <!-- <span class="glyphicon glyphicon-plus plusicon"></span> -->
+          </div>
+          <div class="createButtonValueDiv">
+            Create Package
+          </div>
+        </div>
+        &nbsp;&nbsp;
+        <div class="createButtonDiv" (click)="openEnablePastDateModal(enablePackageModal)">
+          <div class="createButtonIconDiv">
+            <img class="createButtonIcon" src="../../../assets/images/create.png" alt="click here to enable missed dates">
+          </div>
+          <div class="createButtonValueDiv">
+            Enable Missed Dates
+          </div>
+        </div>
+      </div>
+      <br />
+      <!-- div for filter & grid -->
+      <div class="row">
+        <!-- div for filter -->
+        <div class="col-sm-2 filteryDiv">
+          <section class="mySection">
+            <div class="row">
+              <div class="col-md-7">
+                <h2>Filters</h2>
+              </div>
+              <div *ngIf="enableClearAll" class="col-md-5 clearAll">
+                <span (click)="clearAllFilter()">Clear all</span>
+              </div>
+            </div>
+            <div class="row filtersheight">
+              <div *ngFor="let fa of filteredArray; let i=index">
+                <div class="filterSelectedValue" (click)="deleteFilter(fa)">
+                  <div class="filterCrossIcon">✕</div>
+                  <div class="filterCrossValue">{{fa.text}}</div>
+                </div>
+              </div>
+              <!-- <div class="showMore">
+                  <span>Show more</span>
+                </div> -->
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="togglePackageType()" data-toggle="collapse"
+              data-target="#packageTypeFilter">
+              <div class="col-md-10 ">
+                Package Type
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#packageTypeFilter" *ngIf="!showPackageType">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open Package Type">
+                </div>
+                <div data-toggle="collapse" data-target="#packageTypeFilter" *ngIf="showPackageType">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open Package Type" >
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="packageTypeFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let package of packageTypeDetails | slice:0:packageTypeCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox"  [value]="package.packageId"  name="{{package.packageName}}"
+                      id="{{package.packageName}}"  [(ngModel)]="package.selected"
+                      (change)="selectPackageType(package)" />
+                    <label for="{{package.packageName}}"> {{package.packageName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="packageTypeDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMorePackageType()">{{showMorePackageType}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- <section class="mySection">
+                  <div class="row filterHeaderFontWeight" (click)="toggleDate()" data-toggle="collapse"
+                    data-target="#dateFilter">
+                    <div class="col-md-10">
+                      Date
+                    </div>
+                    <div class="col-md-1">
+                      <div data-toggle="collapse" data-target="#dateFilter" *ngIf="!showDate">
+                        <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg">
+                      </div>
+                      <div data-toggle="collapse" data-target="#dateFilter" *ngIf="showDate">
+                        <img class="arrowIcon" src="../../../assets/images/downArrow.svg">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row collapse" id="dateFilter">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11 filterData displayInlineBlock">
+                      <span class="displayInlineBlock">
+                        <input class="form-control dateInput" placeholder="yyyy-mm-dd" type="text" name="dpdate"
+                          readonly="readonly" [(ngModel)]="selectedDate" ngbDatepicker
+                          [footerTemplate]="footerTemplateDate" outsideDays="collapsed" #date="ngbDatepicker"
+                          (dateSelect)="onDateSelect($event)">
+                        <ng-template #footerTemplateDate>
+                          <hr class="my-0">
+                          <button class="btn btn-sm m-2 float-left"
+                            (click)="selectedDate = selectedDatetoday; date.close()">Today</button>
+                          <button class="btn btn-secondary btn-sm m-2 float-right" (click)="date.close()">Close</button>
+                        </ng-template>
+                      </span>
+                      <span class="displayInlineBlock dateImage">
+                        <img class="displayInlineBlock dateIcon" (click)="date.toggle()"
+                          src="../../../../assets/images/calendar.png">
+                      </span>
+                    </div>
+                  </div>
+          </section> -->
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleFunction()" data-toggle="collapse"
+              data-target="#functionFilter">
+              <div class="col-md-10 ">
+                Function
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#functionFilter" *ngIf="!showFunction">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open function filter">
+                </div>
+                <div data-toggle="collapse" data-target="#functionFilter" *ngIf="showFunction">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open function filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="functionFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let function of functionDetails | slice:0:functionCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="function.functionId" [name]="function.functionName"
+                      id="{{function.functionName}}" [(ngModel)]="function.selected"
+                      (change)="selectFunction(function)"/>
+                    <label for="{{function.functionName}}"> {{function.functionName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="functionDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreFunction()">{{showMoreFunction}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleFrequency()" data-toggle="collapse"
+              data-target="#frequency">
+              <div class="col-md-10">
+                Frequency
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#frequency" *ngIf="!showFrequency">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg" alt="click greaterArrow to open frequency filter">
+                </div>
+                <div data-toggle="collapse" data-target="#frequency" *ngIf="showFrequency">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg" alt="click downArrow to open frequency filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="frequency">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let frequency of frequencyDetails| slice:0:frequencyCount ; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="frequency.FrequencyId" [name]="frequency.frequencyName"
+                      id="{{frequency.frequencyName}}" [(ngModel)]="frequency.selected"
+                      (change)="selectFrequency(frequency)" />
+                    <label for="{{frequency.frequencyName}}"> {{frequency.frequencyName}} </label>
+                  </div>
+                </div>
+                <div *ngIf="frequencyDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreFrequency()">{{showMoreFrequency}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- div for grid -->
+
+        <div class="col-sm-10">
+          <div class="row gridDiv">
+            <table class="table table-striped table-hover ">
+              <thead class="table-header">
+                <!-- thead-inverse -->
+                <tr>
+                  <th class="cansort" (click)="sorting('packageType')">PACKAGE TYPE
+                    <span *ngIf="defaultSort == false && sortColumn == 'packageType' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="defaultSort == false && sortColumn == 'packageType' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th>STATUS</th>
+                  <th class="cansort" (click)="sorting('createdon')">CREATED ON
+                    <span *ngIf="sortColumn == 'createdon' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'createdon' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('createdby')">CREATED BY
+                    <span *ngIf="sortColumn == 'createdby' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'createdby' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('modifiedon')">MODIFIED ON
+                    <span *ngIf="sortColumn == 'modifiedon' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'modifiedon' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('modifiedby')">MODIFIED BY
+                    <span *ngIf="sortColumn == 'modifiedby' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'modifiedby' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th>EDIT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="packageDataDisplay?.length<=0">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>No Records found</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <ng-container *ngIf="packageDataDisplay?.length>0">
+                  <tr *ngFor="let item of packageDataDisplay">
+                    <td><span class="spanlink" (click)="viewPackage(viewPackageModal,item)">{{item.packageType}}</span>
+                    </td>
+                    <td [ngClass]="item.statusName">{{item.statusName}}</td>
+                    <td>{{item.createdon | date : "dd-MMM-yyyy"}}</td>
+                    <td>{{item.createdby}}</td>
+                    <td>{{item.modifiedon | date : "dd-MMM-yyyy"}}</td>
+                    <td>{{item.modifiedby}}</td>
+                    <!-- <td><img class="editIcon" src="../../../assets/images/icon-edit.png"
+                        (click)="editPackage(editPackageModal, item.packageId, item.packageType, 'edit')"></td> -->
+                    <td><span class="editIcon glyphicon glyphicon-pencil"
+                        (click)="editPackage(editPackageModal, item.packageId, item.packageType, 'edit', item.statusName)"></span>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="packageDataDisplay?.length>0" class="row gridDiv showPageDiv table-footer">
+            <div class="col-sm-5 pagination">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination" id="paginationtab">
+                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a (click)="setPage(1)">
+                    <<</a> </li> <li [ngClass]="{disabled:pager.currentPage === 1}">
+                      <a (click)="setPage(pager.currentPage - 1)">
+                        <</a> </li> <li *ngFor="let page of pager.pages"
+                          [ngClass]="{active:pager.currentPage === page}">
+                          <a (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(pager.currentPage + 1)">></a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(pager.totalPages)">>></a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-sm-5 pagingOptions">
+              <label for="PageOptionsShow" class="labelpagingOptions">Show</label>&nbsp;
+              <select id ="PageOptionsShow" class="ddlPage" class="optionddl"  [ngModel]="selectedPageSize"  (ngModelChange)="onPagingOptionsChange($event)">
+                <option [value]="i" *ngFor="let i of pageOptions">{{i}}</option>
+              </select>&nbsp;
+              entries
+            </div>
+            <div class="col-sm-2 textnowrap">
+              <span class="pagerecordcount">{{pager.startIndex + 1}} - {{pager.endIndex + 1}} of
+                {{pager.totalItems}} records </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal pop up for Creating Package -->
+<ng-template #createPackageModal let-modal>
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <span class="modal-title">Create Package</span>
+    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+  </div>
+
+  <!-- Modal body -->
+  <div *ngIf="loadingSymbolForModal" class="loader"></div>
+  <div [ngClass]="{'overlay scrollClass disabled':loadingSymbolForModal,'a scrollClass':!loadingSymbolForModal}">
+    <div class="modal-body">
+      <br />
+      <div class="row alignitemcenter">
+        <div class="col-md-1 textnowrap">
+        </div>
+        <div class="col-md-3 textnowrap">
+          <label for="ddlPackageType">Package Type <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-4">
+          <select  id="ddlPackageType" [(ngModel)]='packageTypeId' (change)="getPackgaeTypeName($event)">
+            <option class='option' value="-1">Select</option>
+            <option class='option' *ngFor='let packageType of packageTypeDetails' [value]="packageType.packageId">
+              {{packageType.packageName}}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+        </div>
+      </div>
+      <br />
+      <br />
+      <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3">
+          <button (click)="editPackage(editPackageModal, packageTypeId, null , 'create', null)" type="button"
+            class="btn">Create</button>
+        </div>
+        <div class="col-md-3">
+          <button type="button" class="btn" (click)="dismissCreatePackageModal()">Cancel</button>
+        </div>
+        <div class="col-md-3">
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- Modal pop up for Edit Package -->
+<ng-template #editPackageModal let-modal>
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <span class="modal-title">{{modalTitleName}}: {{editPackageName}}</span>
+    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+    <span class="closebutton glyphicon glyphicon-remove" (click)="dismissCreatePackageModal()"></span>
+    <!-- <img class="closebutton" (click)="dismissCreatePackageModal()" src="../../../../assets/images/close.png"> -->
+  </div>
+
+  <!-- Modal body -->
+  <div *ngIf="loadingSymbolForModal" class="loader"></div>
+  <div [ngClass]="{'overlay scrollClass disabled':loadingSymbolForModal,'scrollClass a':!loadingSymbolForModal}">
+    <div class="modal-body modalscroll">
+      <div class="row rowmarginleft divBackGround">
+        <a (click)="toggleFunctionDetails()" class="functionDetails">Function Details</a>
+      </div>
+      <br />
+      <div class="row alignitemcenter" *ngIf="functionToggle">
+        <div class="col-md-2 textnowrap">
+          <label for="txtFunction">Function <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-2">
+          <input id="txtFunction" type="text" [(ngModel)]="txtFunctionName" maxlength="80"
+            [ngClass]="{'disabled':functionSaving,'':!functionSaving}" specialCharacterOnly>
+        </div>
+        <div class="col-md-2 textnowrap">
+          <label for="txtWeightage"> Weightage <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-2">
+          <input  id="txtWeightage" type="text" [(ngModel)]="txtWeightageForValidation" (input)="inputValidator($event)" maxlength="5"
+          decimalsOnly1 [ngClass]="{'disabled':functionSaving,'':!functionSaving}">
+        </div>
+        <div [ngClass]="{'col-md-1 disabled':functionSaving,'col-md-1':!functionSaving}">
+          <button type="button" class="btn" title="click continue to save function"
+            (click)="SaveFunctionName()">Continue</button>
+          <!-- <img class="editIcon" title="save" (click)="SaveFunctionName()" src="../../../assets/images/icon-save.png"> -->
+
+          <!-- <img class="editIcon clearIcon" title="clear" (click)="ClearFunctionSelection()"
+            src="../../../assets/images/icn-cancel.png"> -->
+        </div>
+        <div [ngClass]="{'col-md-1 disabled':functionSaving,'col-md-1':!functionSaving}">
+          <button style="margin-left:50px !important" type="button" class="btn" title="clear"
+            (click)="ClearFunctionSelection()">Clear</button></div>
+      </div>
+      <br />
+      <div class="row modalgridDiv" *ngIf="functionToggle">
+        <table class="table table-striped table-hover">
+          <thead class="table-header">
+            <!-- thead-inverse -->
+            <tr>
+              <th>FUNCTION</th>
+              <th>WEIGHTAGE</th>
+              <th>ADD OLA</th>
+              <th>EDIT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="editFunctionDetails?.length<=0">
+              <td></td>
+              <td>No Records found</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="editFunctionDetails?.length>0">
+              <tr *ngFor="let item of editFunctionDetails;let i=index">
+                <td class="overFlow" title="{{item.functionName}}">{{item.functionName}}</td>
+                <td><span [hidden]="item.isEdit">{{item.weightage}}</span>
+                  <span [hidden]="!item.isEdit">
+                    <label for="{{item.functionId}}">
+                      <span class="screenreader">W</span>
+                    </label>
+                    <input id="{{item.functionId}}" type="text" [(ngModel)]="txtWeightage"
+                      (input)="inputValidatorNumber($event)" maxlength="5" decimalsOnly1>
+                    </span>
+                </td>
+                <td>
+                  <span>
+                    <!-- <img class="editIcon" src="../../../../assets/images/plus.png"
+                      (click)="AddOLA(item.functionId,item.functionName)" title="Add OLA"> -->
+                    <span class="editIcon glyphicon glyphicon-plus" (click)="AddOLA(item.functionId,item.functionName)"
+                      title="Add OLA"></span>
+                  </span>
+                </td>
+                <td><span *ngIf=!item.isEdit>
+                    <!-- <img class="editIcon" src="../../../assets/images/icon-edit.png"
+                      (click)="editFunction(item.functionId)" title="Edit Function"> -->
+                    <span class="editIcon glyphicon glyphicon-pencil" (click)="editFunction(item.functionId)"
+                      title="Edit Function"></span>
+                  </span>
+                  <!-- <span *ngIf=item.isEdit><img class="editIcon" src="../../../assets/images/icon-save.png"  alt="click here to open editIcon"
+                      (click)="updateFunction(item.functionId,item.functionName)"></span>
+                  <span *ngIf=item.isEdit><img class="editIcon clearIcon" src="../../../assets/images/icon-cancel.png"  alt="click here to Cancel editIcon"
+                      (click)="resetFunction(item.functionId)"></span> -->
+                      <span *ngIf=item.isEdit>
+                        <span class="editIcon1 glyphicon glyphicon-ok-circle"
+                          (click)="updateFunction(item.functionId,item.functionName)" title="Save"></span>
+                      </span>
+                      <span *ngIf=item.isEdit>
+                        <span class="editIcon1 glyphicon glyphicon-remove-circle" (click)="resetFunction(item.functionId)"
+                          title="Cancel"></span>
+                      </span>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <br />
+      <div class="row rowmarginleft divBackGround" *ngIf="toggleOla">
+        Add OLA : {{modalFunctionName}}
+      </div>
+      <br />
+      <div *ngIf="toggleOla">
+        <div class="row alignitemcenter">
+          <!-- <div class="col-md-2 textnowrap">
+                Function <span class="redColour">*</span>
+              </div>
+              <div class="col-md-4">
+                <select [(ngModel)]='functionId' (change)="functionChange()">
+                  <option class='option' value="-1" selected="true">Select</option>
+                  <option class='option' *ngFor='let function of functionDetailsByPackageId' [value]="function.functionId">
+                    {{function.functionName}}</option>
+                </select>
+              </div> -->
+          <div class="col-md-2 textnowrap">
+            <label for="txtOLAName"> OLA Name <span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <input id="txtOLAName" type="text" title="{{txtOLAName}}" [(ngModel)]="txtOLAName" maxlength="500" specialCharacterOnly>
+          </div>
+          <div class="col-md-2 textnowrap">
+            <label for="txtArtetacts">Artefacts <span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <input id="txtArtetacts" type="text" title="{{txtArtetacts}}" [(ngModel)]="txtArtetacts" maxlength="100" specialCharacterOnly>
+          </div>
+        </div>
+        <br />
+        <div class="row alignitemcenter">
+
+          <div class="col-md-2 textnowrap">
+            <label for="ddlFrequency">Frequency <span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <select  id="ddlFrequency" [(ngModel)]='frequencyId'>
+              <option class='option' value="-1" selected="true">Select</option>
+              <option class='option' *ngFor='let frequency of frequencyDetails' [value]="frequency.frequencyId">
+                {{frequency.frequencyName}}</option>
+            </select>
+          </div>
+          <div class="col-md-2 textnowrap optionalOLAMargin">
+            Optional OLA <span class="redColour">*</span>
+          </div>
+          <div class="col-md-4 paddingleft">
+            <div class="radio radio-primary radio-inline">
+              <input type="radio" id="inlineRadio1" name="radioInline" [(ngModel)]="rdOptionalOLA" value="Yes">
+              <label for="inlineRadio1"> Yes </label> &nbsp;&nbsp;&nbsp;
+              <input type="radio" id="inlineRadio2" name="radioInline" [(ngModel)]="rdOptionalOLA" value="No">
+              <label for="inlineRadio2"> No </label>
+            </div>
+          </div>
+        </div>
+        <br />
+        <div class="row alignitemcenter">
+          <div class="col-md-1">
+            <button type="button" class="btn" title="save OLA" (click)="saveOLA()">Save</button>
+          </div>
+          <div class="col-md-1 clearIcon">
+            <button type="button" class="btn " title="clear OLA" (click)="clearOLA()">Clear</button>
+          </div>
+        </div>
+        <br />
+        <div *ngIf="editPackageDataDisplay?.length>0" class="row modalgridDiv">
+          <table class="table table-striped table-hover ">
+            <thead class="table-header">
+              <!-- thead-inverse -->
+              <tr>
+                <th class="cansort" (click)="sortingEdit('functionName')">FUNCTION
+                  <span
+                    *ngIf="defaultSortEdit == false && sortColumnEdit == 'functionName' && sortDirectionEdit == 'asc'">▲</span>
+                  <span
+                    *ngIf="defaultSortEdit == false && sortColumnEdit == 'functionName' && sortDirectionEdit == 'desc'">▼</span>
+                </th>
+                <th class="cansort" (click)="sortingEdit('olaName')">OLA NAME
+                  <span *ngIf="sortColumnEdit == 'olaName' && sortDirectionEdit == 'asc'">▲</span>
+                  <span *ngIf="sortColumnEdit == 'olaName' && sortDirectionEdit == 'desc'">▼</span>
+                </th>
+                <th class="cansort" (click)="sortingEdit('Artefacts')">ARTEFACTS
+                  <span *ngIf="sortColumnEdit == 'Artefacts' && sortDirectionEdit == 'asc'">▲</span>
+                  <span *ngIf="sortColumnEdit == 'Artefacts' && sortDirectionEdit == 'desc'">▼</span>
+                </th>
+                <th class="cansort" (click)="sortingEdit('frequencyName')">FREQUENCY
+                  <span *ngIf="sortColumnEdit == 'frequencyName' && sortDirectionEdit == 'asc'">▲</span>
+                  <span *ngIf="sortColumnEdit == 'frequencyName' && sortDirectionEdit == 'desc'">▼</span>
+                </th>
+                <th class="cansort" (click)="sortingEdit('isOptional')">OPTIONAL OLA
+                  <span *ngIf="sortColumnEdit == 'isOptional' && sortDirectionEdit == 'asc'">▲</span>
+                  <span *ngIf="sortColumnEdit == 'isOptional' && sortDirectionEdit == 'desc'">▼</span>
+                </th>
+                <th>
+                  EDIT
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="editPackageDataDisplay?.length<=0">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>No Records found</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <ng-container *ngIf="editPackageDataDisplay?.length>0">
+                <tr *ngFor="let item of editPackageDataDisplay">
+                  <td>{{item.functionName}}</td>
+                  <td>
+                    <div [hidden]="item.isEdit">{{item.olaName}}</div>
+                    <span [hidden]="!item.isEdit"><label for="{{item.OLAId}}Name"><span class="screenreader">W</span></label><input id="{{item.OLAId}}Name" type="text" title="{{txtOLANameEdit}}"
+                        [(ngModel)]="txtOLANameEdit" maxlength="500" specialCharacterOnly></span>
+                  </td>
+                  <td>
+                    <div class="overFlow" title="{{item.Artefacts}}" [hidden]="item.isEdit">{{item.Artefacts}}</div>
+                    <span [hidden]="!item.isEdit"><label for="{{item.OLAId}}Artefacts"><span class="screenreader">W</span></label><input id="{{item.OLAId}}Artefacts" type="text" title="{{txtArtetactsEdit}}"
+                        [(ngModel)]="txtArtetactsEdit" maxlength="100" specialCharacterOnly></span>
+                  </td>
+                  <td>{{item.frequencyName}}</td>
+                  <td>{{item.isOptional}}
+                  </td>
+                  <td>
+                    <!-- <span *ngIf=!item.isEdit><img class="editIcon" src="../../../assets/images/icon-edit.png" alt="click here to open editIcon"
+                        (click)="editOlaDetails(item.OLAId)" title="Edit Function"></span>
+                    <span *ngIf=item.isEdit><img class="editIcon" src="../../../assets/images/icon-save.png" alt="click here to open updated editIcon"
+                        (click)="updateOlaDetails(item.OLAId)"></span>
+                    <span *ngIf=item.isEdit><img class="editIcon" src="../../../assets/images/icon-cancel.png" alt="click here to Cancel editIcon"
+                        (click)="resetOlaDetails(item.OLAId)"></span> -->
+                        <span *ngIf=!item.isEdit>
+                            <span class="editIcon glyphicon glyphicon-pencil" (click)="editOlaDetails(item.OLAId)"
+                              title="Edit Function"></span>
+                          </span>
+                          <span *ngIf=item.isEdit>
+                            <span class="editIcon1 glyphicon glyphicon-ok-circle" (click)="updateOlaDetails(item.OLAId)"
+                              title="Save"></span>
+                          </span>
+                          <span *ngIf=item.isEdit>
+                            <span class="editIcon1 glyphicon glyphicon-remove-circle" (click)="resetOlaDetails(item.OLAId)"
+                              title="Cancel">
+                            </span>
+                          </span>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="editPackageDataDisplay?.length>0" class="row modalgridDiv showPageDiv table-footer">
+          <div class="col-sm-5 pagination">
+            <ul *ngIf="pagerEdit.pages && pagerEdit.pages.length" class="pagination" id="editpaginationtab">
+              <li [ngClass]="{disabled:pagerEdit.currentPage === 1}">
+                <a (click)="setPageEdit(1)">
+                  <<</a> </li> <li [ngClass]="{disabled:pagerEdit.currentPage === 1}">
+                    <a (click)="setPageView(pagerEdit.currentPage - 1)">
+                      <</a> </li> <li *ngFor="let page of pagerEdit.pages"
+                        [ngClass]="{active:pagerEdit.currentPage === page}">
+                        <a (click)="setPageEdit(page)">{{page}}</a>
+              </li>
+              <li [ngClass]="{disabled:pagerEdit.currentPage === pagerEdit.totalPages}">
+                <a (click)="setPageEdit(pagerEdit.currentPage + 1)">></a>
+              </li>
+              <li [ngClass]="{disabled:pagerEdit.currentPage === pagerEdit.totalPages}">
+                <a (click)="setPageEdit(pagerEdit.totalPages)">>></a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-sm-5 pagingOptions">
+          </div>
+          <div class="col-sm-2 textnowrap">
+            <span class="pagerecordcount">{{pagerEdit.startIndex + 1}} - {{pagerEdit.endIndex + 1}} of
+              {{pagerEdit.totalItems}} records </span>
+          </div>
+        </div>
+      </div>
+
+      <br />
+      <div class="row">
+        <div class="col-md-5">
+        </div>
+        <div class="col-md-2 textnowrap">
+          <button type="button" class="btn" [ngClass]="{ 'disabled': isEditable == true ? false : true }"
+            (click)="submitCreatePackage()">Submit</button>
+        </div>
+        <div class="col-md-5">
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- Modal pop up for View Package -->
+<ng-template #viewPackageModal let-modal>
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <span class="modal-title">View Package</span>
+    <span class="closebutton glyphicon glyphicon-remove" (click)="dismissViewPackageModal()"></span>
+    <!-- <img class="closebutton" (click)="dismissViewPackageModal()" src="../../../../assets/images/close.png"> -->
+  </div>
+
+  <!-- Modal body -->
+  <div *ngIf="loadingSymbolForModal" class="loader"></div>
+  <div [ngClass]="{'overlay disabled':loadingSymbolForModal,'a':!loadingSymbolForModal}">
+    <div class="modal-body modalscroll">
+      <br />
+      <div class="row rowmarginleft">
+        <div class="col-md-3 textnowrap rowdivbackgroundcolor">
+          Package Type
+        </div>
+        <div class="col-md-3 textnowrap">
+          {{viewObjcet.packageType}}
+        </div>
+        <div class="col-md-3 textnowrap rowdivbackgroundcolor">
+          Created By
+        </div>
+        <div class="col-md-3 textnowrap">
+          {{viewObjcet.createdby}}
+        </div>
+      </div>
+      <br />
+      <div class="row rowmarginleft">
+        <div class="col-md-3 textnowrap rowdivbackgroundcolor">
+          Modified On
+        </div>
+        <div class="col-md-3 textnowrap">
+          {{viewObjcet.modifiedon | date : "dd-MMM-yyyy"}}
+        </div>
+        <div class="col-md-3 textnowrap rowdivbackgroundcolor">
+          Modified By
+        </div>
+        <div class="col-md-3 textnowrap">
+          {{viewObjcet.modifiedby}}
+        </div>
+      </div>
+      <br />
+      <br />
+      <div class="row modalgridDiv">
+        <table class="table table-striped table-hover ">
+          <thead class="table-header">
+            <!-- thead-inverse -->
+            <tr>
+              <th class="cansort" (click)="sortingView('functionName')">FUNCTION
+                <span
+                  *ngIf="defaultSortView == false && sortColumnView == 'functionName' && sortDirectionView == 'asc'">▲</span>
+                <span
+                  *ngIf="defaultSortView == false && sortColumnView == 'functionName' && sortDirectionView == 'desc'">▼</span>
+              </th>
+              <!-- <th class="cansort" (click)="sortingView('Weightage')">WEIGHTAGE
+                  <span *ngIf="sortColumnView == 'Weightage' && sortDirectionView == 'asc'">▲</span>
+                  <span *ngIf="sortColumnView == 'Weightage' && sortDirectionView == 'desc'">▼</span>
+                </th> -->
+              <th class="cansort" (click)="sortingView('olaName')">OLA NAME
+                <span *ngIf="sortColumnView == 'olaName' && sortDirectionView == 'asc'">▲</span>
+                <span *ngIf="sortColumnView == 'olaName' && sortDirectionView == 'desc'">▼</span>
+              </th>
+              <th class="cansort" (click)="sortingView('Artefacts')">ARTEFACTS
+                <span *ngIf="sortColumnView == 'Artefacts' && sortDirectionView == 'asc'">▲</span>
+                <span *ngIf="sortColumnView == 'Artefacts' && sortDirectionView == 'desc'">▼</span>
+              </th>
+              <th class="cansort" (click)="sortingView('frequencyName')">FREQUENCY
+                <span *ngIf="sortColumnView == 'frequencyName' && sortDirectionView == 'asc'">▲</span>
+                <span *ngIf="sortColumnView == 'frequencyName' && sortDirectionView == 'desc'">▼</span>
+              </th>
+              <th class="cansort" (click)="sortingView('isOptional')">OPTIONAL OLA
+                <span *ngIf="sortColumnView == 'isOptional' && sortDirectionView == 'asc'">▲</span>
+                <span *ngIf="sortColumnView == 'isOptional' && sortDirectionView == 'desc'">▼</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="viewPackageDataDisplay?.length<=0">
+              <td></td>
+              <!-- <td></td> -->
+              <td></td>
+              <td>No Records found</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="viewPackageDataDisplay?.length>0">
+              <tr *ngFor="let item of viewPackageDataDisplay">
+                <td>{{item.functionName}}</td>
+                <!-- <td>{{item.Weightage}}</td> -->
+                <td>{{item.olaName}}</td>
+                <td class="overFlow" title="{{item.Artefacts}}">{{item.Artefacts}}</td>
+                <td>{{item.frequencyName}}</td>
+                <td>{{item.isOptional}}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="viewPackageDataDisplay?.length>0" class="row modalgridDiv showPageDiv table-footer">
+        <div class="col-sm-5 pagination">
+          <ul *ngIf="pagerView.pages && pagerView.pages.length" class="pagination" id="viewpaginationtab">
+            <li [ngClass]="{disabled:pagerView.currentPage === 1}">
+              <a (click)="setPageView(1)">
+                <<</a> </li> <li [ngClass]="{disabled:pagerView.currentPage === 1}">
+                  <a (click)="setPageView(pagerView.currentPage - 1)">
+                    <</a> </li> <li *ngFor="let page of pagerView.pages"
+                      [ngClass]="{active:pagerView.currentPage === page}">
+                      <a (click)="setPageView(page)">{{page}}</a>
+            </li>
+            <li [ngClass]="{disabled:pagerView.currentPage === pagerView.totalPages}">
+              <a (click)="setPageView(pagerView.currentPage + 1)">></a>
+            </li>
+            <li [ngClass]="{disabled:pagerView.currentPage === pagerView.totalPages}">
+              <a (click)="setPageView(pagerView.totalPages)">>></a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-5 pagingOptions">
+          <label for="ddlPageItems" class="labelpagingOptions">Show</label>&nbsp;  
+          <select  id="ddlPageItems" class="optionddl"  [ngModel]="selectedPageSizeView"
+             (ngModelChange)="onPagingOptionsChangeView($event)">
+            <option [value]="i" *ngFor="let i of pageOptionsView">{{i}}</option>
+          </select>&nbsp;
+          entries
+        </div>
+        <div class="col-sm-2 textnowrap">
+          <span class="pagerecordcount">{{pagerView.startIndex + 1}} - {{pagerView.endIndex + 1}} of
+            {{pagerView.totalItems}} records </span>
+        </div>
+      </div>
+      <br />
+      <br />
+      <!-- <div class="row">
+          <div class="col-md-5">
+            
+          </div>
+          <div class="col-md-2 textnowrap">
+            <button type="button" class="btn" (click)="dismissViewPackageModal()" data-dismiss="modal">Close</button>
+          </div>
+          <div class="col-md-5">
+          </div>
+        </div> -->
+    </div>
+  </div>
+
+</ng-template>
+
+
+<!-- Modal pop up for Enable Past Date Package -->
+<ng-template #enablePackageModal let-modal>
+
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <span class="modal-title">Enable Missed Dates</span>
+    <span class="closebutton glyphicon glyphicon-remove" (click)="dismissEnbalePackageModal()"></span>
+    <!-- <img class="closebutton" (click)="dismissEnbalePackageModal()" src="../../../../assets/images/close.png"> -->
+    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+  </div>
+
+  <!-- Modal body -->
+
+  <div *ngIf="loadingSymbolForModal" class="loader"></div>
+  <div [ngClass]="{'overlay disabled':loadingSymbolForModal,'a':!loadingSymbolForModal}">
+    <div class="modal-body">
+      <br />
+      <div class="row alignitemcenter">
+
+        <div class="col-md-2 textnowrap">
+          <label for="ddlPackageType">Package Type <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-4">
+          <select  id="ddlPackageType" [(ngModel)]='enablePackageTypeId'>
+            <option class='option' value="-1">Select</option>
+            <option class='option' *ngFor='let packageType of packageTypeDetails' [value]="packageType.packageId">
+              {{packageType.packageName}}</option>
+          </select>
+        </div>
+        <div class="col-md-2 textnowrap">
+          <label for="ddlFacility">Site <span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-4">
+          <select id="ddlFacility" [(ngModel)]='enablefacilityId'>
+            <option class='option' value="-1">Select</option>
+            <option class='option' *ngFor='let facility of facilityDetails' [value]="facility.facilityId">
+              {{facility.facilityName}}</option>
+          </select>
+        </div>
+
+      </div>
+      <br />
+      <br />
+      <div class="row alignitemcenter">
+        <div class="col-md-2 textnowrap">
+          <label for="txtPeriodPicker1"> Period Picker</label>
+        </div>
+        <div class="col-md-4 displayInlineBlock">
+          <span class="displayInlineBlock">
+            <input id="txtPeriodPicker1" class="form-control dateInput" placeholder="yyyy-mm-dd" type="text" name="dp2" readonly="readonly"
+              [(ngModel)]="periodDateSecond" ngbDatepicker [footerTemplate]="footerTemplate1" outsideDays="collapsed"
+              #d2="ngbDatepicker" [maxDate]="{year:year, month: month, day: day }">
+            <ng-template #footerTemplate1>
+              <hr class="my-0">
+              <button class="btn btn-sm m-2 float-left" (click)="periodDateSecond = today; d2.close()">Today</button>
+              <button class="btn btn-secondary btn-sm m-2 float-right" (click)="periodDateSecond =''">Clear</button>
+            </ng-template>
+          </span>
+          <span class="displayInlineBlock dateImage">
+            <img class="displayInlineBlock dateIcon" (click)="d2.toggle()" src="../../../../assets/images/calendar.png"  alt="click here to open Period Picker">
+          </span>
+        </div>
+        <div class="col-md-2 textnowrap">
+          <label for="txtPeriodPicker2">Period Picker</label>
+        </div>
+        <div class="col-md-4 displayInlineBlock">
+          <span class="displayInlineBlock">
+            <input id="txtPeriodPicker2" class="form-control dateInput" placeholder="yyyy-mm-dd" type="text" name="dp1" readonly="readonly"
+              [(ngModel)]="periodDate" ngbDatepicker [footerTemplate]="footerTemplate" outsideDays="collapsed"
+              #d1="ngbDatepicker" [maxDate]="{year:year, month: month, day: day }">
+            <ng-template #footerTemplate>
+              <hr class="my-0">
+              <button class="btn btn-sm m-2 float-left" (click)="periodDate = today; d1.close()">Today</button>
+              <button class="btn btn-secondary btn-sm m-2 float-right" (click)="periodDate = ''">Clear</button>
+            </ng-template>
+          </span>
+          <span class="displayInlineBlock dateImage">
+            <img class="displayInlineBlock dateIcon" (click)="d1.toggle()" src="../../../../assets/images/calendar.png" alt="click here to open Period Picker">
+          </span>
+        </div>
+
+      </div>
+      <br />
+
+      <div class="row alignitemcenter" style="margin-top:12px">
+        <div class="col-md-2 textnowrap">
+          <label for="txtPeriodPicker3">Period Picker</label>
+        </div>
+        <div class="col-md-4 displayInlineBlock">
+          <!-- <input type="date" [(ngModel)]='periodDateThird' [max]="dateTime"> -->
+          <!-- <input class="form-control datepciker" placeholder="yyyy-mm-dd" name="dp3" [(ngModel)]="periodDateThird"
+                  ngbDatepicker #d3="ngbDatepicker"
+                  [maxDate]="{year:year, month: month, day: day }">
+                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button> -->
+
+          <span class="displayInlineBlock">
+            <input  id="txtPeriodPicker3" class="form-control dateInput" placeholder="yyyy-mm-dd" type="text" name="dp3" readonly="readonly"
+              [(ngModel)]="periodDateThird" ngbDatepicker [footerTemplate]="footerTemplate2" outsideDays="collapsed"
+              #d3="ngbDatepicker" [maxDate]="{year:year, month: month, day: day }">
+            <ng-template #footerTemplate2>
+              <hr class="my-0">
+              <button class="btn btn-sm m-2 float-left" (click)="periodDateThird = today; d3.close()">Today</button>
+              <button class="btn btn-secondary btn-sm m-2 float-right" (click)="periodDateThird='';">Clear</button>
+            </ng-template>
+          </span>
+          <span class="displayInlineBlock dateImage">
+            <img class="displayInlineBlock dateIcon" (click)="d3.toggle()" src="../../../../assets/images/calendar.png" alt="click here to open Period Picker">
+          </span>
+        </div>
+      </div>
+      <br />
+      <br />
+      <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-2">
+          <button (click)="enablePastDates(enablePackageTypeId, enablefacilityId)" type="button"
+            class="btn">Save</button>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn" (click)="clearEnbalePackageModal()">Clear</button>
+        </div>
+        <div class="col-md-3">
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

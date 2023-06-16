@@ -1,0 +1,43 @@
+{
+  "sampleDataUrl": "../data/data.json",
+  "sampleDataUrl2": "../data/data2.json",
+  "msal": {
+    "auth": {
+      "authority": "https://login.microsoftonline.com/f3211d0e-125b-42c3-86db-322b19a65a22/",
+      "clientId": "bf5b431f-79d8-433d-87b6-c12633999a33",
+      "redirectUri": "https://localhost:44345/" ,
+      "framework": {
+        "protectedResourceMap": [
+          [
+            "https://yourapiservice.accenture.com",
+            [
+              "https://yourapiservice.accenture.com//service scope"
+            ]
+          ]
+        ]
+      }
+    }
+  },
+  "isEsoEnabled": false,
+  "isAzureADv1Eso": true,
+  "eso": {
+    "loginUrl": "https://federation-sts.accenture.com/oauth/ls/connect/authorize",
+    "logoutUrl": "https://federation-sts.accenture.com/oauth/ls/connect/endsession",
+    "clientId": "2542.srmautomation.web",
+    "oidc": false,
+    "redirectUri": "https://vendorcompliance.ciodev.accenture.com",
+    "scope": "user_profile openid read_cloudspacookies_service",
+    "responseType": "id_token token",
+    "Realms": "Accenture,External",
+    "Flow": "Implicit",
+    "issuer": "urn:federation:accenture"
+  },
+  "aadv1eso": {
+    "tenant": "f3211d0e-125b-42c3-86db-322b19a65a22",
+    "clientId": "clientId",
+    "redirectUri": "redirectUri",
+    "endpoints": {
+      "serviceBaseUrl": "service resouce Identifier"
+    }
+  }
+}

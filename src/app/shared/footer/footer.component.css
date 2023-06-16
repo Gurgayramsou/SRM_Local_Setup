@@ -1,0 +1,48 @@
+.footerButton{
+    cursor: pointer;
+    /*background-color: darkcyan;  #005757*/
+    background-color: #016166;
+    /* box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149); */
+    border-top-left-radius: 5px;   
+    border-top-right-radius: 5px; 
+    display: inline-flex;
+    font-weight: 500;
+    height: 20px;
+    padding: 0px 20px 0px 20px;
+    align-items: center;
+    float:left;
+    margin-top: -20px;
+}
+
+.footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /* padding: 0.2rem; */
+    /*background-color: lightgrey;*//* cadetblue;*//*slategrey;*/ /*#efefef;*/
+    background-color: #dbdbdb;
+    text-align: center;
+    color: black;
+    font-size: 12px;
+    margin-left: 0px;
+}
+
+.footerlink{
+    float: left;
+    /* color:white; */
+}
+.footertext{
+    padding: 0.5rem;
+}
+.alignCenter{
+    text-align:center;
+}
+.modal-open {
+    /* overflow: scroll; */
+    height: 500px;
+}
+.modalcontent{
+    overflow: scroll;
+    padding-bottom: 10px !important;
+}

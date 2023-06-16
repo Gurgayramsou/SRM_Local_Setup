@@ -1,0 +1,62 @@
+[
+    {
+        "menuId": 1,
+        "menuCode": "Admin",
+        "menuDescription": "Admin",
+        "MenuURL":"background:url(../../../assets/images/Admin.png) no-repeat 256px center;",
+        "subMenu": [
+            {
+                "subMenuCode": "Create Package",
+                "subMenuDescription": "Create Package",
+                "subMenuURL": "/admin/createpackage"
+            },
+            {
+                "subMenuCode": "Task Master",
+                "subMenuDescription": "Task Master",
+                "subMenuURL": "/admin/taskmaster"
+            }
+        ]
+    },
+    {
+        "menuId": 2,
+        "menuCode": "Transaction",
+        "menuDescription": "Transaction",
+        "MenuURL":"background:url(../../../assets/images/Admin.png) no-repeat 256px center;",
+        "subMenu": [
+            {
+                "subMenuCode": "Task Data Entry",
+                "subMenuDescription": "Task Data Entry",
+                "subMenuURL": "/transaction/taskdataentry"
+            },
+            {
+                "subMenuCode": "Submit Score",
+                "subMenuDescription": "Submit Score",
+                "subMenuURL": "/transaction/submitscore"
+            },
+            {
+                "subMenuCode": "ZL/SDL View",
+                "subMenuDescription": "ZL/SDL View",
+                "subMenuURL": "/transaction/approval"
+            },
+            {
+                "subMenuCode": "Vendor View",
+                "subMenuDescription": "Vendor View",
+                "subMenuURL": "/transaction/vendor"
+            }
+        ]
+    },
+    {
+        "menuId": 3,
+        "menuCode": "Reports",
+        "menuDescription": "Reports",
+        "MenuURL":"background:url(../../../assets/images/Admin.png) no-repeat 256px center;",
+        "subMenu": null
+    },
+    {
+        "menuId": 4,
+        "menuCode": "Logout",
+        "menuDescription": "Logout",
+        "MenuURL":"background:url(../../../assets/images/Admin.png) no-repeat 256px center;",
+        "subMenu": null
+    }
+]

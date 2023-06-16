@@ -1,0 +1,42 @@
+[
+    {
+        "packageId": 1,
+        "packageName": "Electrical Equipments"
+        
+    },
+    {
+        "packageId": 2,
+        "packageName": "IBMS Ops"
+        
+    },
+    {
+        "packageId": 3,
+        "packageName": "HVAC"
+        
+    },
+    {
+        "packageId": 4,
+        "packageName": "UPS"
+        
+    },
+    {
+        "packageId": 5,
+        "packageName": "DG"
+        
+    },
+    {
+        "packageId": 6,
+        "packageName": "PAC"
+        
+    },
+    {
+        "packageId": 7,
+        "packageName": "Carpet"
+        
+    },
+    {
+        "packageId": 8,
+        "packageName": "Beverage"
+        
+    }
+]

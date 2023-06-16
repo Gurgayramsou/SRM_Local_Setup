@@ -1,0 +1,436 @@
+<!-- <title>{{message}}</title> -->
+<div *ngIf="!fullAccess" class="container-fluid">
+  <div *ngIf="loadingSymbol" class="loader"></div>
+  <div [ngClass]="{'overlay':loadingSymbol,'a':!loadingSymbol}">
+    <div class="container-fluid bodyDiv">
+      {{noAccessMessage}}
+    </div>
+  </div>
+</div>
+<div *ngIf='fullAccess' class="container-fluid">
+  <div *ngIf="loadingSymbol" class="loader"></div>
+  <div [ngClass]="{'overlay disabled':loadingSymbol,'a':!loadingSymbol}">
+    <div class="container-fluid bodyDiv">
+      <!-- div for header -->
+      <div class="row">
+        <span>
+          <h1>{{message}}</h1>
+        </span>
+      </div>
+      <!-- div for create button -->
+      <div class="row buttonPullRight">
+        <!--<div class="createButtonDiv" data-toggle="modal" data-target="#addRoleModal" data-backdrop="static"
+      data-keyboard="false" (click)=AddRole()> -->
+        <div class="createButtonDiv" (click)=AddRole(addRoleModal)>
+          <div class="createButtonIconDiv">
+            <img class="createButtonIcon" src="../../../assets/images/create.png"
+              alt="click here to create RoleMapping">
+          </div>
+          <div class="createButtonValueDiv">
+            Add Role Mapping
+          </div>
+        </div>
+      </div>
+      <br />
+      <!-- div for filter & grid -->
+      <div class="row">
+        <!-- div for filter -->
+        <div class="col-sm-2 filteryDiv">
+          <section class="mySection">
+            <div class="row">
+              <div class="col-md-7">
+                <h2>Filters</h2>
+              </div>
+              <div *ngIf="enableClearAll" class="col-md-5 clearAll">
+                <span (click)="clearAllFilter()">Clear all</span>
+              </div>
+            </div>
+            <div class="row filtersheight">
+              <div *ngFor="let fa of filteredArray; let i=index">
+                <div class="filterSelectedValue" (click)="deleteFilter(fa)">
+                  <div class="filterCrossIcon">✕</div>
+                  <div class="filterCrossValue">{{fa.text}}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleEnterpriseId()" data-toggle="collapse"
+              data-target="#enterpriseIdFilter">
+              <div class="col-md-10">
+                <label for="txtenterprise" class="labelpagingOptions"> Enterprise Id</label>
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#enterpriseIdFilter" *ngIf="!showEnterpriseId">
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg"
+                    alt="click greaterArrow to open enterpriseId filter">
+                </div>
+                <div data-toggle="collapse" data-target="#enterpriseIdFilter" *ngIf="showEnterpriseId">
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg"
+                    alt="click downArrow to open enterpriseId filter">
+                </div>
+              </div>
+            </div>
+            <div class="row collapse" id="enterpriseIdFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData displayInlineBlock">
+                <span class="displayInlineBlock">
+                  <input id="txtenterprise" type="text" class="form-control searchInput" [ngbTypeahead]="search"
+                    [(ngModel)]="selectedEnterpriseId" (selectItem)="selectEnterpriseId($event)" />
+                </span>
+                <span (click)="searchEnterpriseId()" class="displayInlineBlock searchImage">
+                  <img class="" src="../../../assets/images/search.png" alt="click here to open searchIcon">
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section class="mySection">
+            <div class="row filterHeaderFontWeight" (click)="toggleRole()"  data-toggle="collapse"
+              data-target="#roleFilter">
+              <div class="col-md-10">
+                Role
+              </div>
+              <div class="col-md-1">
+                <div data-toggle="collapse" data-target="#roleFilter" *ngIf="!showRole">
+                  <!-- &#9658; -->
+                  <img class="arrowIcon" src="../../../assets/images/greaterArrow.svg"
+                    alt="click greaterArrow to open Role filter"> </div>
+                <div data-toggle="collapse"  data-target="#roleFilter"  *ngIf="showRole">
+                  <!-- &#9660; -->
+                  <img class="arrowIcon" src="../../../assets/images/downArrow.svg"
+                    alt="click downArrow to open Role filter"> </div>
+              </div>
+            </div>
+            <div class="row collapse" id="roleFilter">
+              <div class="col-md-1"></div>
+              <div class="col-md-11 filterData">
+                <div class="filterDataheight">
+                  <div *ngFor="let role of roleDetails | slice:0:roleCount; let i=index"
+                    class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" [value]="role.RoleId" name="{{role.RoleNm}}" id="{{role.RoleNm}}"
+                       [(ngModel)]="role.selected"  (change)="selectRole(role)"   />
+                    <label for="{{role.RoleNm}}"> {{role.RoleNm}} </label>
+                  </div>
+                </div>
+                <div *ngIf="roleDetails?.length > filterCount">
+                  <span class="showMore" (click)="displayMoreRole()">{{showMoreRole}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- div for grid -->
+
+        <div class="col-sm-10">
+          <div class="row gridDiv">
+            <table class="table table-striped table-hover ">
+              <thead class="table-header">
+                <!-- thead-inverse -->
+                <tr>
+                  <th class="cansort" (click)="sorting('RoleNm')">ROLE
+                    <span *ngIf="sortColumn == 'RoleNm' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="sortColumn == 'RoleNm' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('enterpriseId')">ENTERPRISE ID
+                    <span *ngIf="sortColumn == 'enterpriseId' && sortDirection == 'asc'">▲</span>
+                    <span
+                      *ngIf="defaultSort == false && sortColumn == 'enterpriseId' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('modifiedon')">MODIFIED ON
+                    <span *ngIf="defaultSort == false && sortColumn == 'modifiedon' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="defaultSort == false && sortColumn == 'modifiedon' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th class="cansort" (click)="sorting('modifiedby')">MODIFIED BY
+                    <span *ngIf="defaultSort == false && sortColumn == 'modifiedby' && sortDirection == 'asc'">▲</span>
+                    <span *ngIf="defaultSort == false && sortColumn == 'modifiedby' && sortDirection == 'desc'">▼</span>
+                  </th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="packageDataDisplay?.length<=0">
+                  <td></td>
+                  <td></td>
+                  <td>No Records found</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <ng-container *ngIf="packageDataDisplay?.length>0">
+                  <tr *ngFor="let item of packageDataDisplay">
+                    <td>{{item.RoleNm}}</td>
+                    <td>{{item.enterpriseId}}</td>
+                    <td>{{item.modifiedon | date : "dd-MMM-yyyy"}}</td>
+                    <td>{{item.modifiedby}}</td>
+                    <!-- <td><img class="editIcon" src="../../../assets/images/icon-edit.png" (click)=" EditRole(addRoleModal,item)"></td> -->
+                    <td><span class="editIcon glyphicon glyphicon-pencil" (click)="EditRole(addRoleModal,item)"
+                        title="Edit"></span>
+                      &nbsp;&nbsp;&nbsp;&nbsp; <span class="editIcon glyphicon glyphicon-trash"
+                        (click)="DeleteRolePopup(item)" title="Delete Role"></span>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="packageDataDisplay?.length>0" class="row gridDiv showPageDiv table-footer">
+            <div class="col-sm-5 pagination">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination" id="paginationtab1">
+                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a (click)="setPage(1)">
+                    <<</a> </li> <li [ngClass]="{disabled:pager.currentPage === 1}">
+                      <a (click)="setPage(pager.currentPage - 1)">
+                        <</a> </li> <li *ngFor="let page of pager.pages"
+                          [ngClass]="{active:pager.currentPage === page}">
+                          <a (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(pager.currentPage + 1)">></a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(pager.totalPages)">>></a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-sm-5 pagingOptions">
+              <label for="ddlPageItems1" class="labelpagingOptions">Show</label>&nbsp;
+              <select id="ddlPageItems1" class="optionddl"  [ngModel]="selectedPageSize"
+                 (ngModelChange)="onPagingOptionsChange($event)">
+                <option [value]="i" *ngFor="let i of pageOptions">{{i}}</option>
+              </select>&nbsp;
+              entries
+            </div>
+            <div class="col-sm-2 textnowrap">
+              <span class="pagerecordcount">{{pager.startIndex + 1}} - {{pager.endIndex + 1}} of
+                {{pager.totalItems}} records </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal pop up for Add Role/Action -->
+<ng-template #addRoleModal let-modal>
+
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <span class="modal-title"> {{ ModalPopUpHeader }} </span>
+    <!-- <img class="closebutton"  (click)="cancelbtn()" src="../../../../assets/images/close.png"> -->
+    <span class="closebutton glyphicon glyphicon-remove" (click)="cancelbtn()"></span>
+  </div>
+
+  <!-- Modal body -->
+  <div *ngIf="loadingSymbolForModal" class="loader"></div>
+  <div [ngClass]="{'overlay':loadingSymbolForModal,'a':!loadingSymbolForModal}">
+    <div class="modal-body">
+      <br />
+      <div class="row alignitemcenter">
+        <div class="col-md-2 textnowrap">
+          <label for="txtenterpriseId">Enterprise Id<span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-4">
+          <input id="txtenterpriseId" type="text" [ngClass]="{ 'disabled': isAddRole == true ? false : true }"
+            [readonly]="isAddRole == true ? false : true" [(ngModel)]='txtenterpriseId'>
+        </div>
+        <div class="col-md-2 textnowrap">
+          <label for="ddlRoleName">Role<span class="redColour">*</span></label>
+        </div>
+        <div class="col-md-4">
+          <select id="ddlRoleName" [ngClass]="{ 'disabled': isAddRole == true ? false : true }"
+            [(ngModel)]='selectRoleId' (change)="onRoleChange()">
+            <option class='option' value="-1">Select</option>
+            <option class='option' *ngFor='let role of roleDetails' [value]="role.RoleId">
+              {{role.RoleNm}}</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div [style.display]="isCity? 'none':'block'">
+        <div class="row alignitemcenter">
+
+          <div class="col-md-2 textnowrap">
+            <label for="ddlPackageType">Package Type<span class="redColour">*</span></label>
+            <br /> <br />
+            <div [style.display]="isVendor? 'block':'none'">
+              <label for="ddlVendor">Vendor<span class="redColour">*</span></label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <!-- <select  id="ddlPackageType"  [(ngModel)]='selectPackageTypeId' > -->
+            <select id="ddlPackageType" [(ngModel)]='selectPackageId' (change)="onPackageChange()">
+              <option class='option' value="-1">Select</option>
+              <!-- <option class='option' value= "-2" [style.display]="IsSRMAdmin? 'block':'none'" >All</option> -->
+              <option class='option' *ngFor='let packageType of packageTypeDetails' [value]="packageType.packageId">
+                {{packageType.packageName}}</option>
+            </select>
+            <br /> <br />
+            <div [style.display]="isVendor? 'block':'none'">
+              <select id="ddlVendor" [ngClass]="{ 'disabled': isAddRole == true ? false : true }"
+                [(ngModel)]='selectVendorId'>
+                <option class='option' value="-1">Select</option>
+                <option class='option' *ngFor='let vendor of vendorDetails' [value]="vendor.vendorId">
+                  {{vendor.vendorName}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-2 textnowrap">
+            <label for="ddlFacility">Site<span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <select id="ddlFacility" [(ngModel)]='selectfacilityId'
+              [ngClass]="{ 'disabled': IsSRMAdmin == true ? true : false }" multiple="multiple">
+              <option class="option" *ngFor='let facility of facilityDetails' [value]="facility.facilityId"
+                [selected]="facility.selected">
+                {{facility.facilityName}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <!-- <div [style.display]="isVendor? 'block':'none'">
+      <div class="row alignitemcenter" >
+        <div class="col-md-2 textnowrap">
+          <label for="ddlVendor">Vendor Name<span class="redColour">*</span></label>
+        </div>
+      <div class="col-md-4">
+        <select  id="ddlVendor" [ngClass]="{ 'disabled': isAddRole == true ? false : true }" [(ngModel)]='selectVendorId'>
+          <option class='option' value="-1">Select</option>
+          <option class='option' *ngFor='let vendor of vendorDetails' [value]="vendor.vendorId">
+            {{vendor.vendorName}}</option>
+        </select>
+      </div>
+      </div>
+    </div> -->
+      </div>
+      <div [style.display]="isCity? 'block':'none'">
+        <div class="row alignitemcenter">
+          <div class="col-md-2 textnowrap">
+            <label for="ddlCity">City<span class="redColour">*</span></label>
+          </div>
+          <div class="col-md-4">
+            <select id="ddlCity" [(ngModel)]='selectCityId' (change)="onCityChange()">
+              <option class='option' value="-1">Select</option>
+              <option class='option' *ngFor='let city of cityDetails' [value]="city.cityId">
+                {{city.cityName}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <br />
+      <br />
+      <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn" (click)="Savebtn()">Save</button>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn" data-dismiss="modal" (click)="clearAllFields()">Clear</button>
+        </div>
+        <div class="col-md-3">
+        </div>
+      </div>
+      <br />
+      <br />
+      <div *ngIf="isAddRole==false && viewPackageDataDisplay?.length>0" class="row modalgridDiv">
+        <table class="table table-striped table-hover ">
+          <thead class="table-header">
+            <!-- thead-inverse -->
+            <tr>
+              <th class="cansort" (click)="sortingView('packageId')">PACKAGE TYPE
+                <span
+                  *ngIf="defaultSortView == false && sortColumnView == 'packageId' && sortDirectionView == 'asc'">▲</span>
+                <span
+                  *ngIf="defaultSortView == false && sortColumnView == 'packageId' && sortDirectionView == 'desc'">▼</span>
+              </th>
+              <th class="cansort" (click)="sortingView('facilityName')">SITE
+                <span *ngIf="sortColumnView == 'facilityName' && sortDirectionView == 'asc'">▲</span>
+                <span *ngIf="sortColumnView == 'facilityName' && sortDirectionView == 'desc'">▼</span>
+              </th>
+              <th>DELETE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="viewPackageDataDisplay?.length<=0">
+              <td></td>
+              <td>No Records found</td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="viewPackageDataDisplay?.length>0">
+              <tr *ngFor="let item of viewPackageDataDisplay">
+                <td *ngIf="item.packageName == null">All</td>
+                <td *ngIf="item.packageName != null">{{item.packageName}}</td>
+                <td>{{item.facilityName}}</td>
+                <!-- <td><img class="deleteIcon" src="../../../assets/images/icon-delete.png" (click)=" DeleteRecord(item)"></td> -->
+                <td><span class="editIcon glyphicon glyphicon-trash" (click)="DeleteRecord(item)"></span></td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="isAddRole==false && viewPackageDataDisplay?.length>0"
+        class="row modalgridDiv showPageDiv table-footer">
+        <div class="col-sm-5 pagination">
+          <ul *ngIf="pagerView.pages && pagerView.pages.length" class="pagination" id="paginationtab2">
+            <li [ngClass]="{disabled:pagerView.currentPage === 1}">
+              <a (click)="setPageView(1)">
+                <<</a> </li> <li [ngClass]="{disabled:pagerView.currentPage === 1}">
+                  <a (click)="setPageView(pagerView.currentPage - 1)">
+                    <</a> </li> <li *ngFor="let page of pagerView.pages"
+                      [ngClass]="{active:pagerView.currentPage === page}">
+                      <a (click)="setPageView(page)">{{page}}</a>
+            </li>
+            <li [ngClass]="{disabled:pagerView.currentPage === pagerView.totalPages}">
+              <a (click)="setPageView(pagerView.currentPage + 1)">></a>
+            </li>
+            <li [ngClass]="{disabled:pagerView.currentPage === pagerView.totalPages}">
+              <a (click)="setPageView(pagerView.totalPages)">>></a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-5 pagingOptions">
+          <label for="ddlPageItems" class="labelpagingOptions">Show</label>&nbsp;
+          <select id="ddlPageItems" class="optionddl"  [ngModel]="selectedPageSizeView"
+             (ngModelChange)="onPagingOptionsChangeView($event)">
+            <option [value]="i" *ngFor="let i of pageOptionsView">{{i}}</option>
+          </select>&nbsp;
+          entries
+        </div>
+        <div class="col-sm-2 textnowrap">
+          <span class="pagerecordcount">{{pagerView.startIndex + 1}} - {{pagerView.endIndex + 1}} of
+            {{pagerView.totalItems}} records </span>
+        </div>
+      </div>
+      <div *ngIf="isAddRole==false && viewCityData?.length>0" class="row modalgridDiv">
+        <table class="table table-striped table-hover ">
+          <thead class="table-header">
+            <!-- thead-inverse -->
+            <tr>
+              <th class="cansort" (click)="sortingView('CityNm')">CITY
+                <span
+                  *ngIf="defaultSortView == false && sortColumnView == 'CityNm' && sortDirectionView == 'asc'">▲</span>
+                <span
+                  *ngIf="defaultSortView == false && sortColumnView == 'CityNm' && sortDirectionView == 'desc'">▼</span>
+              </th>
+              <th>DELETE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="viewCityData?.length<=0">
+              <td></td>
+              <td>No Records found</td>
+            </tr>
+            <ng-container *ngIf="viewCityData?.length>0">
+              <tr *ngFor="let item of viewCityData">
+                <td>{{item.CityNm}}</td>
+                <td><span class="editIcon glyphicon glyphicon-trash" (click)="DeleteRecord(item)"></span></td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,17 @@
+[
+    {
+        "statusId": 1,
+        "statusName": "Draft",
+        "selected": false
+    },
+    {
+        "statusId": 2,
+        "statusName": "Submitted",
+        "selected": false
+    },
+    {
+        "statusId": 3,
+        "statusName": "Closed",
+        "selected": false
+    }
+  ]

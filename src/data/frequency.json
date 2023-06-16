@@ -1,0 +1,42 @@
+[
+    {
+        "frequencyId": 1,
+        "frequencyName": "Daily",
+        "selected": false
+    },
+    {
+        "frequencyId": 2,
+        "frequencyName": "Weekly",
+        "selected": false
+    },
+    {
+        "frequencyId": 3,
+        "frequencyName": "Fortnightly",
+        "selected": false
+    },
+    {
+        "frequencyId": 4,
+        "frequencyName": "Monthly",
+        "selected": false
+    },
+    {
+        "frequencyId": 5,
+        "frequencyName": "Bi Monthly",
+        "selected": false
+    },
+    {
+        "frequencyId": 6,
+        "frequencyName": "Quaterly",
+        "selected": false
+    },
+    {
+        "frequencyId": 7,
+        "frequencyName": "Half Yearly",
+        "selected": false
+    },
+    {
+        "frequencyId": 8,
+        "frequencyName": "Yearly",
+        "selected": false
+    }
+  ]
